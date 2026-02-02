@@ -1,0 +1,2860 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BizAI - Professional Business News</title>
+    <meta name="description" content="Stay informed with BizAI - your personalized 5-minute daily business briefing.">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bg: #f8f7f4;
+            --card: #ffffff;
+            --foreground: #1a1a1a;
+            --muted: #6b7280;
+            --border: #e5e5e5;
+            --accent: #d4a853;
+            --accent-light: rgba(212, 168, 83, 0.1);
+            --primary-gradient: linear-gradient(135deg, #1e3a5f 0%, #2d5a87 100%);
+            --accent-gradient: linear-gradient(135deg, #d4a853 0%, #e8c068 100%);
+            --success: #22c55e;
+            --success-light: rgba(34, 197, 94, 0.1);
+            --destructive: #ef4444;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: var(--foreground);
+            min-height: 100vh;
+        }
+
+        .font-serif {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* Layout */
+        .app-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: var(--card);
+            border-right: 1px solid var(--border);
+            position: fixed;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+        }
+
+        @media (max-width: 768px) {
+            .sidebar {
+                display: none;
+            }
+            .sidebar.mobile-open {
+                display: flex;
+                width: 100%;
+                max-width: 320px;
+            }
+        }
+
+        .logo-container {
+            padding: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-icon svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .logo-text {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--foreground);
+        }
+
+        .logo-text span {
+            color: var(--accent);
+        }
+
+        /* Eco Counter */
+        .eco-counter {
+            padding: 1rem;
+            margin: 1rem;
+            background: var(--success-light);
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .eco-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .eco-icon {
+            color: var(--success);
+        }
+
+        .eco-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--success);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .eco-count {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        .eco-text {
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        .eco-message {
+            font-size: 0.75rem;
+            color: var(--success);
+            margin-top: 0.5rem;
+        }
+
+        /* Navigation */
+        .nav-section {
+            flex: 1;
+            padding: 1rem;
+            overflow-y: auto;
+        }
+
+        .nav-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0 1rem;
+            margin-bottom: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: var(--muted);
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: left;
+        }
+
+        .nav-item:hover {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+
+        .nav-item.active {
+            background: var(--bg);
+            color: var(--foreground);
+        }
+
+        .nav-item.active svg {
+            color: var(--accent);
+        }
+
+        .nav-badge {
+            margin-left: auto;
+            font-size: 0.7rem;
+            font-weight: 600;
+            background: var(--accent);
+            color: white;
+            padding: 0.15rem 0.5rem;
+            border-radius: 999px;
+        }
+
+        /* User Profile in Sidebar */
+        .user-profile {
+            padding: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .user-card {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .user-card:hover {
+            background: var(--bg);
+        }
+
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.875rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .user-info {
+            flex: 1;
+        }
+
+        .user-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .user-role {
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        .user-points {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 0.75rem;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            margin-left: 280px;
+            min-height: 100vh;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+                padding-top: 60px;
+            }
+        }
+
+        .content-wrapper {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 2.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .content-wrapper {
+                padding: 1.5rem;
+            }
+        }
+
+        /* Mobile Header */
+        .mobile-header {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: var(--card);
+            border-bottom: 1px solid var(--border);
+            padding: 0 1rem;
+            align-items: center;
+            justify-content: space-between;
+            z-index: 20;
+        }
+
+        @media (max-width: 768px) {
+            .mobile-header {
+                display: flex;
+            }
+        }
+
+        .mobile-menu-btn {
+            padding: 0.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        .mobile-logo {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .mobile-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .icon-btn {
+            padding: 0.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--muted);
+        }
+
+        /* Page Header */
+        .page-header {
+            margin-bottom: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            color: var(--muted);
+            font-size: 1rem;
+        }
+
+        .page-subtitle .highlight {
+            color: var(--accent);
+            font-weight: 600;
+        }
+
+        /* Progress Card */
+        .progress-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: var(--card);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            margin-top: 1.5rem;
+            max-width: 400px;
+        }
+
+        .progress-wrapper {
+            flex: 1;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--bg);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--accent-gradient);
+            border-radius: 4px;
+            transition: width 0.3s;
+        }
+
+        .progress-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+        }
+
+        /* Section Header */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+
+        .section-subtitle {
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        /* News Cards */
+        .news-card {
+            background: var(--card);
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            overflow: hidden;
+            transition: transform 0.2s, box-shadow 0.2s;
+            cursor: pointer;
+        }
+
+        .news-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+        }
+
+        .news-card.featured {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+        }
+
+        @media (max-width: 768px) {
+            .news-card.featured {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ✅ FIX: real image support + graceful fallback */
+        .news-image-wrap {
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+            background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+        }
+
+        .news-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .news-image-fallback {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--muted);
+            font-size: 0.875rem;
+        }
+
+        .news-card.featured .news-image {
+            height: 100%;
+            min-height: 280px;
+        }
+        .news-card.featured .news-image-wrap {
+            height: 100%;
+            min-height: 280px;
+        }
+
+        .news-content {
+            padding: 1.5rem;
+        }
+
+        .news-meta {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+            font-size: 0.8rem;
+        }
+
+        .news-source {
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .news-date {
+            color: var(--muted);
+        }
+
+        .news-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            line-height: 1.4;
+            margin-bottom: 0.75rem;
+        }
+
+        .news-card.featured .news-title {
+            font-size: 1.5rem;
+        }
+
+        .news-desc {
+            font-size: 0.9rem;
+            color: var(--muted);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .news-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .read-time {
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+
+        .read-btn {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--accent);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* News Grid */
+        .news-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 1024px) {
+            .news-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 640px) {
+            .news-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Market Cards */
+        .market-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        @media (max-width: 1024px) {
+            .market-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .market-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            text-align: center;
+            transition: border-color 0.2s;
+        }
+
+        .market-card:hover {
+            border-color: var(--accent);
+        }
+
+        .market-name {
+            font-size: 0.8rem;
+            color: var(--muted);
+            margin-bottom: 0.5rem;
+        }
+
+        .market-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+        }
+
+        .market-change {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .market-change.positive {
+            color: var(--success);
+        }
+
+        .market-change.negative {
+            color: var(--destructive);
+        }
+
+        /* Leaderboard */
+        .leaderboard {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            max-width: 600px;
+        }
+
+        .leaderboard-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            transition: transform 0.2s;
+        }
+
+        .leaderboard-item:hover {
+            transform: scale(1.01);
+        }
+
+        .leaderboard-item.top-1 {
+            background: linear-gradient(135deg, rgba(250, 204, 21, 0.1) 0%, rgba(245, 158, 11, 0.1) 100%);
+            border-color: rgba(250, 204, 21, 0.3);
+        }
+
+        .leaderboard-item.top-2 {
+            background: linear-gradient(135deg, rgba(156, 163, 175, 0.1) 0%, rgba(107, 114, 128, 0.1) 100%);
+            border-color: rgba(156, 163, 175, 0.3);
+        }
+
+        .leaderboard-item.top-3 {
+            background: linear-gradient(135deg, rgba(217, 119, 6, 0.1) 0%, rgba(180, 83, 9, 0.1) 100%);
+            border-color: rgba(217, 119, 6, 0.3);
+        }
+
+        .leaderboard-item.current-user {
+            outline: 2px solid var(--accent);
+        }
+
+        .rank {
+            width: 32px;
+            display: flex;
+            justify-content: center;
+            font-weight: 700;
+            color: var(--muted);
+        }
+
+        .rank-icon {
+            font-size: 1.25rem;
+        }
+
+        .leaderboard-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 700;
+            font-size: 0.875rem;
+            font-family: 'Playfair Display', serif;
+        }
+
+        .leaderboard-item.top-1 .leaderboard-avatar {
+            background: linear-gradient(135deg, #facc15 0%, #f59e0b 100%);
+        }
+
+        .leaderboard-info {
+            flex: 1;
+        }
+
+        .leaderboard-name {
+            font-weight: 600;
+        }
+
+        .leaderboard-name .you-tag {
+            font-size: 0.75rem;
+            color: var(--muted);
+            margin-left: 0.5rem;
+        }
+
+        .leaderboard-streak {
+            font-size: 0.75rem;
+            color: var(--muted);
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .leaderboard-points {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 700;
+        }
+
+        .leaderboard-points .pts {
+            font-size: 0.75rem;
+            color: var(--muted);
+            font-weight: 400;
+        }
+
+        /* Quiz Component */
+        .quiz-container {
+            max-width: 600px;
+        }
+
+        .quiz-header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .quiz-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .quiz-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .quiz-score {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255,255,255,0.2);
+            padding: 0.35rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.875rem;
+        }
+
+        .quiz-progress {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .quiz-progress-dot {
+            flex: 1;
+            height: 6px;
+            border-radius: 3px;
+            background: rgba(255,255,255,0.3);
+        }
+
+        .quiz-progress-dot.completed {
+            background: var(--accent);
+        }
+
+        .quiz-progress-dot.current {
+            background: white;
+        }
+
+        .quiz-body {
+            background: var(--card);
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 12px 12px;
+        }
+
+        .quiz-question-num {
+            font-size: 0.75rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.5rem;
+        }
+
+        .quiz-question {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .quiz-option {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg);
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
+            width: 100%;
+        }
+
+        .quiz-option:hover:not(:disabled) {
+            border-color: var(--accent);
+        }
+
+        .quiz-option.selected {
+            background: var(--accent-light);
+            border-color: var(--accent);
+        }
+
+        .quiz-option.correct {
+            background: var(--success-light);
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .quiz-option.wrong {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: var(--destructive);
+            color: var(--destructive);
+        }
+
+        .option-letter {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--card);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 0.875rem;
+        }
+
+        .quiz-option.correct .option-letter {
+            background: var(--success);
+            color: white;
+        }
+
+        .quiz-option.wrong .option-letter {
+            background: var(--destructive);
+            color: white;
+        }
+
+        .quiz-explanation {
+            padding: 1rem;
+            background: var(--bg);
+            border-radius: 8px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .quiz-explanation strong {
+            color: var(--foreground);
+        }
+
+        .quiz-btn {
+            width: 100%;
+            padding: 0.875rem;
+            background: var(--accent-gradient);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            transition: opacity 0.2s;
+        }
+
+        .quiz-btn:hover {
+            opacity: 0.9;
+        }
+
+        .quiz-complete {
+            text-align: center;
+            padding: 2rem 1rem;
+        }
+
+        .quiz-trophy {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 1.5rem;
+            background: var(--accent-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .quiz-trophy svg {
+            width: 40px;
+            height: 40px;
+            color: var(--accent);
+        }
+
+        .quiz-complete h3 {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .quiz-final-score {
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--accent);
+            margin: 0.5rem 0;
+        }
+
+        /* Memory Game */
+        .game-container {
+            max-width: 600px;
+        }
+
+        .game-header {
+            background: var(--primary-gradient);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px 12px 0 0;
+        }
+
+        .game-header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .game-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .game-reset-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            background: rgba(255,255,255,0.2);
+            padding: 0.35rem 0.75rem;
+            border-radius: 999px;
+            font-size: 0.875rem;
+            border: none;
+            color: white;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .game-reset-btn:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .game-stats {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+        }
+
+        .game-body {
+            background: var(--card);
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            border-top: none;
+            border-radius: 0 0 12px 12px;
+        }
+
+        .memory-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 0.75rem;
+        }
+
+        .memory-card {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            font-size: 1.75rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: transform 0.3s;
+            border: none;
+            background: var(--primary-gradient);
+        }
+
+        .memory-card.flipped {
+            background: var(--accent-gradient);
+            transform: rotateY(0deg);
+        }
+
+        .memory-card:not(.flipped) {
+            transform: rotateY(180deg);
+        }
+
+        .memory-card.matched {
+            opacity: 0.5;
+        }
+
+        .memory-card:hover:not(.flipped):not(.matched) {
+            transform: scale(1.05) rotateY(180deg);
+        }
+
+        .game-complete {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        /* Profile Page */
+        .profile-header-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 1.5rem;
+        }
+
+        .profile-banner {
+            height: 120px;
+            background: var(--primary-gradient);
+            position: relative;
+        }
+
+        .profile-edit-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+        }
+
+        .profile-main {
+            padding: 0 1.5rem 1.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            align-items: flex-end;
+            margin-top: -48px;
+        }
+
+        .profile-avatar {
+            width: 96px;
+            height: 96px;
+            border-radius: 16px;
+            background: linear-gradient(135deg, var(--accent) 0%, #f59e0b 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 2rem;
+            font-weight: 700;
+            font-family: 'Playfair Display', serif;
+            border: 4px solid var(--card);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .profile-info {
+            flex: 1;
+            min-width: 200px;
+        }
+
+        .profile-name-row {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .profile-name {
+            font-size: 1.5rem;
+            font-family: 'Playfair Display', serif;
+            font-weight: 700;
+        }
+
+        .profile-badge {
+            font-size: 0.7rem;
+            font-weight: 600;
+            background: var(--accent);
+            color: white;
+            padding: 0.2rem 0.5rem;
+            border-radius: 999px;
+        }
+
+        .profile-subtitle {
+            color: var(--muted);
+            font-size: 0.9rem;
+        }
+
+        .profile-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .profile-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .profile-btn:hover {
+            background: var(--card);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        .stat-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1rem;
+            text-align: center;
+            transition: border-color 0.2s;
+        }
+
+        .stat-card:hover {
+            border-color: var(--accent);
+        }
+
+        .stat-icon {
+            margin-bottom: 0.5rem;
+            color: var(--accent);
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        /* Eco Impact Card */
+        .eco-impact-card {
+            background: linear-gradient(135deg, var(--success-light) 0%, rgba(16, 185, 129, 0.1) 100%);
+            border: 1px solid rgba(34, 197, 94, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .eco-impact-icon {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: rgba(34, 197, 94, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .eco-impact-icon svg {
+            width: 32px;
+            height: 32px;
+            color: var(--success);
+        }
+
+        .eco-impact-info {
+            flex: 1;
+        }
+
+        .eco-impact-info h3 {
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .eco-impact-info p {
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        .eco-impact-info strong {
+            color: var(--success);
+        }
+
+        .eco-impact-stats {
+            text-align: right;
+        }
+
+        .eco-impact-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--success);
+        }
+
+        .eco-impact-unit {
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        /* Achievements */
+        .achievements-card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .achievements-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .achievements-title {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-weight: 600;
+        }
+
+        .achievements-count {
+            font-size: 0.875rem;
+            color: var(--muted);
+        }
+
+        .achievements-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .achievements-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .achievement-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .achievement-item.earned {
+            background: var(--accent-light);
+            border-color: rgba(212, 168, 83, 0.3);
+        }
+
+        .achievement-item:not(.earned) {
+            opacity: 0.7;
+            background: var(--bg);
+        }
+
+        .achievement-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .achievement-item.earned .achievement-icon {
+            background: var(--accent-gradient);
+            color: white;
+        }
+
+        .achievement-item:not(.earned) .achievement-icon {
+            background: var(--card);
+            color: var(--muted);
+        }
+
+        .achievement-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .achievement-name {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .achievement-desc {
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        .achievement-date {
+            font-size: 0.75rem;
+            color: var(--accent);
+            margin-top: 0.25rem;
+        }
+
+        /* Cards & Sections */
+        .card {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .card-title {
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        /* Settings */
+        .setting-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .setting-row:last-child {
+            border-bottom: none;
+        }
+
+        .setting-label {
+            font-weight: 500;
+        }
+
+        .setting-desc {
+            font-size: 0.85rem;
+            color: var(--muted);
+        }
+
+        .toggle {
+            width: 44px;
+            height: 24px;
+            background: var(--border);
+            border-radius: 12px;
+            position: relative;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .toggle.active {
+            background: var(--accent);
+        }
+
+        .toggle::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
+            border-radius: 50%;
+            transition: transform 0.2s;
+        }
+
+        .toggle.active::after {
+            transform: translateX(20px);
+        }
+
+        .save-btn {
+            padding: 0.75rem 1.5rem;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            float: right;
+        }
+
+        /* Games Page Grid */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 1024px) {
+            .games-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .game-placeholder {
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+        }
+
+        .game-placeholder-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .game-placeholder-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--accent-light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--accent);
+        }
+
+        .game-placeholder h3 {
+            font-weight: 600;
+        }
+
+        .game-placeholder .coming-soon {
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        .game-placeholder p {
+            font-size: 0.9rem;
+            color: var(--muted);
+        }
+
+        /* Mobile Menu Overlay */
+        .mobile-overlay {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 25;
+        }
+
+        .mobile-overlay.active {
+            display: block;
+        }
+
+        .mobile-sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 100%;
+            max-width: 320px;
+            background: var(--card);
+            z-index: 30;
+            transform: translateX(-100%);
+            transition: transform 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mobile-sidebar.active {
+            transform: translateX(0);
+        }
+
+        .mobile-sidebar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .close-btn {
+            padding: 0.5rem;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .animate-fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        /* Utilities */
+        .hidden {
+            display: none !important;
+        }
+
+        .mb-10 {
+            margin-bottom: 2.5rem;
+        }
+
+        section {
+            margin-bottom: 2.5rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Desktop Sidebar -->
+        <aside class="sidebar" id="desktopSidebar">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="40" height="40" rx="8" fill="url(#logoGrad)"/>
+                        <rect x="8" y="22" width="5" height="10" fill="white"/>
+                        <rect x="17" y="16" width="5" height="16" fill="white"/>
+                        <rect x="26" y="10" width="5" height="22" fill="white"/>
+                        <path d="M10 18L20 10L30 6" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                        <defs>
+                            <linearGradient id="logoGrad" x1="0" y1="0" x2="40" y2="40">
+                                <stop offset="0%" stop-color="#1e3a5f"/>
+                                <stop offset="100%" stop-color="#2d5a87"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span class="logo-text">Biz<span>AI</span></span>
+            </div>
+
+            <!-- Eco Counter -->
+            <div class="eco-counter">
+                <div class="eco-header">
+                    <svg class="eco-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
+                        <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+                    </svg>
+                    <span class="eco-label">Go Green</span>
+                </div>
+                <div class="eco-count" id="paperCount">12,847</div>
+                <p class="eco-text">Newspapers Saved</p>
+                <p class="eco-message">🌍 You're saving the planet!</p>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="nav-section">
+                <p class="nav-label">Main</p>
+                <button class="nav-item active" data-page="home">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
+                    Daily Briefing
+                </button>
+                <button class="nav-item" data-page="library">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m16 6 4 14"/><path d="M12 6v14"/><path d="M8 8v12"/><path d="M4 4v16"/></svg>
+                    Library
+                </button>
+                <button class="nav-item" data-page="saved">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/></svg>
+                    Saved Articles
+                </button>
+                <button class="nav-item" data-page="market">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                    Market Data
+                </button>
+
+                <p class="nav-label">Activities</p>
+                <button class="nav-item" data-page="quiz">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/><path d="M15 13a4.5 4.5 0 0 1-3-4 4.5 4.5 0 0 1-3 4"/><path d="M17.599 6.5a3 3 0 0 0 .399-1.375"/><path d="M6.003 5.125A3 3 0 0 0 6.401 6.5"/><path d="M3.477 10.896a4 4 0 0 1 .585-.396"/><path d="M19.938 10.5a4 4 0 0 1 .585.396"/><path d="M6 18a4 4 0 0 1-1.967-.516"/><path d="M19.967 17.484A4 4 0 0 1 18 18"/></svg>
+                    Daily Quiz
+                    <span class="nav-badge">5 pts</span>
+                </button>
+                <button class="nav-item" data-page="games">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" x2="10" y1="12" y2="12"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="15" x2="15.01" y1="13" y2="13"/><line x1="18" x2="18.01" y1="11" y2="11"/><rect width="20" height="12" x="2" y="6" rx="2"/></svg>
+                    Fun Games
+                </button>
+                <button class="nav-item" data-page="leaderboard">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                    Leaderboard
+                </button>
+
+                <p class="nav-label">Account</p>
+                <button class="nav-item" data-page="profile">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
+                    Profile
+                </button>
+                <button class="nav-item" data-page="settings">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                    Settings
+                </button>
+            </nav>
+
+            <!-- User Profile -->
+            <div class="user-profile">
+                <div class="user-card" onclick="navigateTo('profile')">
+                    <div class="user-avatar">SRK</div>
+                    <div class="user-info">
+                        <p class="user-name">SRK</p>
+                        <p class="user-role">Premium Reader</p>
+                    </div>
+                    <div class="user-points">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                        2,450
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Mobile Header -->
+        <header class="mobile-header">
+            <div class="mobile-logo">
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+                </button>
+                <div class="logo-icon" style="width:32px;height:32px;">
+                    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="40" height="40" rx="8" fill="url(#logoGrad2)"/>
+                        <rect x="8" y="22" width="5" height="10" fill="white"/>
+                        <rect x="17" y="16" width="5" height="16" fill="white"/>
+                        <rect x="26" y="10" width="5" height="22" fill="white"/>
+                        <path d="M10 18L20 10L30 6" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                        <defs>
+                            <linearGradient id="logoGrad2" x1="0" y1="0" x2="40" y2="40">
+                                <stop offset="0%" stop-color="#1e3a5f"/>
+                                <stop offset="100%" stop-color="#2d5a87"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span class="logo-text" style="font-size:1.25rem;">Biz<span style="color:var(--accent);">AI</span></span>
+            </div>
+            <div class="mobile-actions">
+                <button class="icon-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+                </button>
+                <button class="icon-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Mobile Overlay -->
+        <div class="mobile-overlay" id="mobileOverlay" onclick="toggleMobileMenu()"></div>
+        
+        <!-- Mobile Sidebar -->
+        <div class="mobile-sidebar" id="mobileSidebar">
+            <div class="mobile-sidebar-header">
+                <div class="mobile-logo">
+                    <div class="logo-icon" style="width:32px;height:32px;">
+                        <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="40" height="40" rx="8" fill="url(#logoGrad3)"/>
+                            <rect x="8" y="22" width="5" height="10" fill="white"/>
+                            <rect x="17" y="16" width="5" height="16" fill="white"/>
+                            <rect x="26" y="10" width="5" height="22" fill="white"/>
+                            <path d="M10 18L20 10L30 6" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+                            <defs>
+                                <linearGradient id="logoGrad3" x1="0" y1="0" x2="40" y2="40">
+                                    <stop offset="0%" stop-color="#1e3a5f"/>
+                                    <stop offset="100%" stop-color="#2d5a87"/>
+                                </linearGradient>
+                            </defs>
+                        </svg>
+                    </div>
+                    <span class="logo-text" style="font-size:1.25rem;">Biz<span style="color:var(--accent);">AI</span></span>
+                </div>
+                <button class="close-btn" onclick="toggleMobileMenu()">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                </button>
+            </div>
+            <!-- Mobile nav items will be cloned here -->
+            <div class="eco-counter">
+                <div class="eco-header">
+                    <svg class="eco-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"/>
+                        <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/>
+                    </svg>
+                    <span class="eco-label">Go Green</span>
+                </div>
+                <div class="eco-count" id="mobilePaperCount">12,847</div>
+                <p class="eco-text">Newspapers Saved</p>
+                <p class="eco-message">🌍 You're saving the planet!</p>
+            </div>
+            <nav class="nav-section" id="mobileNav">
+                <!-- Cloned from desktop -->
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-wrapper">
+                <!-- Home Page -->
+                <div id="page-home" class="page animate-fade-in">
+                    <div class="page-header">
+                        <h1 class="page-title font-serif">Good Morning, SRK.</h1>
+                        <p class="page-subtitle">Here is your <span class="highlight">5-minute briefing</span> for today.</p>
+                        
+                        <div class="progress-card">
+                            <div class="progress-wrapper">
+                                <div class="progress-label">
+                                    <span>Daily Goal</span>
+                                    <span style="color:var(--muted)">1/5 read</span>
+                                </div>
+                                <div class="progress-bar">
+                                    <div class="progress-fill" style="width: 20%"></div>
+                                </div>
+                            </div>
+                            <div class="progress-icon">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <section>
+                        <div class="section-header">
+                            <h2 class="section-title font-serif">Top Story</h2>
+                            <span class="section-subtitle">Curated for you</span>
+                        </div>
+                        <div class="news-card featured">
+                            <!-- ✅ FIXED IMAGE BLOCK -->
+                            <div class="news-image-wrap">
+                                <img
+                                    class="news-image"
+                                    src="Image.jpg"
+                                    alt="Global markets rally"
+                                    loading="lazy"
+                                    onload="this.nextElementSibling.style.display='none';"
+                                    onerror="this.style.display='none';"
+                                />
+                                <div class="news-image-fallback">Image.jpg</div>
+                            </div>
+
+                            <div class="news-content">
+                                <div class="news-meta">
+                                    <span class="news-source">Financial Times</span>
+                                    <span class="news-date">Today</span>
+                                </div>
+                                <h3 class="news-title font-serif">Global Markets Rally as Inflation Data Shows Unexpected Cooling</h3>
+                                <p class="news-desc">Major indices hit record highs today as the latest CPI report indicates inflation is falling faster than central bank targets, prompting speculation of early rate cuts. Tech and consumer staples led the charge in a broad-based rally.</p>
+                                <div class="news-footer">
+                                    <span class="read-time">4 min read</span>
+                                    <span class="read-btn">Read More →</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section>
+                        <div class="section-header">
+                            <h2 class="section-title font-serif">Quick Reads</h2>
+                            <span class="section-subtitle">Under 5 min</span>
+                        </div>
+                        <div class="news-grid">
+                            <div class="news-card">
+                                <!-- ✅ FIXED IMAGE BLOCK -->
+                                <div class="news-image-wrap">
+                                    <img
+                                        class="news-image"
+                                        src="Image.jpg"
+                                        alt="Remote work"
+                                        loading="lazy"
+                                        onload="this.nextElementSibling.style.display='none';"
+                                        onerror="this.style.display='none';"
+                                    />
+                                    <div class="news-image-fallback">Image.jpg</div>
+                                </div>
+
+                                <div class="news-content">
+                                    <div class="news-meta">
+                                        <span class="news-source">HBR</span>
+                                        <span class="news-date">Today</span>
+                                    </div>
+                                    <h3 class="news-title font-serif">The Future of Remote Work: Hybrid Models Becoming the Standard</h3>
+                                    <p class="news-desc">A new study of Fortune 500 companies reveals that 78% have settled on a structured hybrid model.</p>
+                                    <div class="news-footer">
+                                        <span class="read-time">3 min read</span>
+                                        <span class="read-btn">Read →</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="news-card">
+                                <!-- ✅ FIXED IMAGE BLOCK -->
+                                <div class="news-image-wrap">
+                                    <img
+                                        class="news-image"
+                                        src="Image.jpg"
+                                        alt="AI regulation"
+                                        loading="lazy"
+                                        onload="this.nextElementSibling.style.display='none';"
+                                        onerror="this.style.display='none';"
+                                    />
+                                    <div class="news-image-fallback">Image.jpg</div>
+                                </div>
+
+                                <div class="news-content">
+                                    <div class="news-meta">
+                                        <span class="news-source">Bloomberg</span>
+                                        <span class="news-date">Yesterday</span>
+                                    </div>
+                                    <h3 class="news-title font-serif">AI Regulation: What Business Leaders Need to Know Now</h3>
+                                    <p class="news-desc">With the EU AI Act coming into force, executives must prepare compliance strategies.</p>
+                                    <div class="news-footer">
+                                        <span class="read-time">5 min read</span>
+                                        <span class="read-btn">Read →</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="news-card">
+                                <!-- ✅ FIXED IMAGE BLOCK -->
+                                <div class="news-image-wrap">
+                                    <img
+                                        class="news-image"
+                                        src="Image.jpg"
+                                        alt="Supply chain resilience"
+                                        loading="lazy"
+                                        onload="this.nextElementSibling.style.display='none';"
+                                        onerror="this.style.display='none';"
+                                    />
+                                    <div class="news-image-fallback">Image.jpg</div>
+                                </div>
+
+                                <div class="news-content">
+                                    <div class="news-meta">
+                                        <span class="news-source">WSJ</span>
+                                        <span class="news-date">Yesterday</span>
+                                    </div>
+                                    <h3 class="news-title font-serif">Supply Chain Resilience in an Era of Geopolitical Tension</h3>
+                                    <p class="news-desc">Strategies for diversifying suppliers and near-shoring production are top of mind.</p>
+                                    <div class="news-footer">
+                                        <span class="read-time">6 min read</span>
+                                        <span class="read-btn">Read →</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- Library Page -->
+                <div id="page-library" class="page hidden animate-fade-in">
+                    <div class="page-header">
+                        <h1 class="page-title font-serif">Your Library</h1>
+                        <p class="page-subtitle">Saved articles and reading history.</p>
+                    </div>
+                    <div class="news-grid">
+                        <div class="news-card">
+                            <!-- ✅ FIXED IMAGE BLOCK -->
+                            <div class="news-image-wrap">
+                                <img
+                                    class="news-image"
+                                    src="Image.jpg"
+                                    alt="Global Markets Rally"
+                                    loading="lazy"
+                                    onload="this.nextElementSibling.style.display='none';"
+                                    onerror="this.style.display='none';"
+                                />
+                                <div class="news-image-fallback">Image.jpg</div>
+                            </div>
+
+                            <div class="news-content">
+                                <div class="news-meta">
+                                    <span class="news-source">Financial Times</span>
+                                    <span class="news-date">Saved</span>
+                                </div>
+                                <h3 class="news-title font-serif">Global Markets Rally</h3>
+                                <p class="news-desc">Major indices hit record highs today as the latest CPI report indicates inflation is falling...</p>
+                                <div class="news-footer">
+                                    <span class="read-time">4 min read</span>
+                                    <span class="read-btn">Read →</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="news-card">
+                            <!-- ✅ FIXED IMAGE BLOCK -->
+                            <div class="news-image-wrap">
+                                <img
+                                    class="news-image"
+                                    src="Image.jpg"
+                                    alt="Future of Remote Work"
+                                    loading="lazy"
+                                    onload="this.nextElementSibling.style.display='none';"
+                                    onerror="this.style.display='none';"
+                                />
+                                <div class="news-image-fallback">Image.jpg</div>
+                            </div>
+
+                            <div class="news-content">
+                                <div class="news-meta">
+                                    <span class="news-source">HBR</span>
+                                    <span class="news-date">Saved</span>
+                                </div>
+                                <h3 class="news-title font-serif">The Future of Remote Work</h3>
+                                <p class="news-desc">A new study of Fortune 500 companies reveals that 78% have settled on a structured hybrid model...</p>
+                                <div class="news-footer">
+                                    <span class="read-time">3 min read</span>
+                                    <span class="read-btn">Read →</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Saved Articles Page -->
+                <div id="page-saved" class="page hidden animate-fade-in">
+                    <div class="page-header">
+                        <h1 class="page-title font-serif">Saved Articles</h1>
+                        <p class="page-subtitle">Articles you've bookmarked for later.</p>
+                    </div>
+                    <div class="news-grid">
+                        <div class="news-card">
+                            <!-- ✅ FIXED IMAGE BLOCK -->
+                            <div class="news-image-wrap">
+                                <img
+                                    class="news-image"
+                                    src="Image.jpg"
+                                    alt="Future of Remote Work"
+                                    loading="lazy"
+                                    onload="this.nextElementSibling.style.display='none';"
+                                    onerror="this.style.display='none';"
+                                />
+                                <div class="news-image-fallback">Image.jpg</div>
+                            </div>
+
+                            <div class="news-content">
+                                <div class="news-meta">
+                                    <span class="news-source">HBR</span>
+                                    <span class="news-date">Today</span>
+                                </div>
+                                <h3 class="news-title font-serif">The Future of Remote Work</h3>
+                                <p class="news-desc">A new study of Fortune 500 companies reveals that 78% have settled on a structured hybrid model.</p>
+                                <div class="news-footer">
+                                    <span class="read-time">3 min read</span>
+                                    <span class="read-btn">Read →</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="news-card">
+                            <!-- ✅ FIXED IMAGE BLOCK -->
+                            <div class="news-image-wrap">
+                                <img
+                                    class="news-image"
+                                    src="Image.jpg"
+                                    alt="AI Regulation"
+                                    loading="lazy"
+                                    onload="this.nextElementSibling.style.display='none';"
+                                    onerror="this.style.display='none';"
+                                />
+                                <div class="news-image-fallback">Image.jpg</div>
+                            </div>
+
+                            <div class="news-content">
+                                <div class="news-meta">
+                                    <span class="news-source">Bloomberg</span>
+                                    <span class="news-date">Yesterday</span>
+                                </div>
+                                <h3 class="news-title font-serif">AI Regulation: What Business Leaders Need to Know</h3>
+                                <p class="news-desc">With the EU AI Act coming into force, executives must prepare compliance strategies.</p>
+                                <div class="news-footer">
+                                    <span class="read-time">5 min read</span>
+                                    <span class="read-btn">Read →</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="news-card">
+                            <!-- ✅ FIXED IMAGE BLOCK -->
+                            <div class="news-image-wrap">
+                                <img
+                                    class="news-image"
+                                    src="Image.jpg"
+                                    alt="Supply Chain Resilience"
+                                    loading="lazy"
+                                    onload="this.nextElementSibling.style.display='none';"
+                                    onerror="this.style.display='none';"
+                                />
+                                <div class="news-image-fallback">Image.jpg</div>
+                            </div>
+
+                            <div class="news-content">
+                                <div class="news-meta">
+                                    <span class="news-source">WSJ</span>
+                                    <span class="news-date">Yesterday</span>
+                                </div>
+                                <h3 class="news-title font-serif">Supply Chain Resilience</h3>
+                                <p class="news-desc">Strategies for diversifying suppliers and near-shoring production are top of mind.</p>
+                                <div class="news-footer">
+                                    <span class="read-time">6 min read</span>
+                                    <span class="read-btn">Read →</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Market Data Page -->
+                <div id="page-market" class="page hidden animate-fade-in">
+                    <div class="page-header">
+                        <h1 class="page-title font-serif">Market Data</h1>
+                        <p class="page-subtitle">Live overview of global markets.</p>
+                    </div>
+                    
+                    <div class="market-grid">
+                        <div class="market-card">
+                            <p class="market-name">S&P 500</p>
+                            <p class="market-value">4,783.45</p>
+                            <p class="market-change positive">+0.45%</p>
+                        </div>
+                        <div class="market-card">
+                            <p class="market-name">NASDAQ</p>
+                            <p class="market-value">15,055.65</p>
+                            <p class="market-change positive">+0.75%</p>
+                        </div>
+                        <div class="market-card">
+                            <p class="market-name">DJIA</p>
+                            <p class="market-value">37,695.73</p>
+                            <p class="market-change negative">-0.08%</p>
+                        </div>
+                        <div class="market-card">
+                            <p class="market-name">FTSE 100</p>
+                            <p class="market-value">7,694.19</p>
+                            <p class="market-change positive">+0.12%</p>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="card-title">Market Performance</h3>
+                        <div class="news-image-wrap" style="height:300px;border-radius:8px;">
+                            <div class="news-image-fallback">Chart Coming Soon</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quiz Page -->
+                <div id="page-quiz" class="page hidden animate-fade-in">
+                    <div class="page-header">
+                        <h1 class="page-title font-serif">Daily Quiz</h1>
+                        <p class="page-subtitle">Test your business knowledge and earn points!</p>
+                    </div>
+                    
+                    <div class="quiz-container" id="quizContainer">
+                        <div class="quiz-header">
+                            <div class="quiz-header-top">
+                                <div class="quiz-title">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/></svg>
+                                    Daily Business Quiz
+                                </div>
+                                <div class="quiz-score">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                                    <span id="quizScore">0</span> pts
+                                </div>
+                            </div>
+                            <div class="quiz-progress" id="quizProgress">
+                                <div class="quiz-progress-dot current"></div>
+                                <div class="quiz-progress-dot"></div>
+                                <div class="quiz-progress-dot"></div>
+                            </div>
+                        </div>
+                        <div class="quiz-body" id="quizBody">
+                            <p class="quiz-question-num">Question 1 of 3</p>
+                            <h3 class="quiz-question font-serif" id="questionText">Which company recently became the first to reach a $3 trillion market cap?</h3>
+                            <div class="quiz-options" id="quizOptions">
+                                <button class="quiz-option" onclick="selectAnswer(0)">
+                                    <span class="option-letter">A</span>
+                                    <span>Microsoft</span>
+                                </button>
+                                <button class="quiz-option" onclick="selectAnswer(1)">
+                                    <span class="option-letter">B</span>
+                                    <span>Apple</span>
+                                </button>
+                                <button class="quiz-option" onclick="selectAnswer(2)">
+                                    <span class="option-letter">C</span>
+                                    <span>Amazon</span>
+                                </button>
+                                <button class="quiz-option" onclick="selectAnswer(3)">
+                                    <span class="option-letter">D</span>
+                                    <span>Google</span>
+                                </button>
+                            </div>
+                            <div class="quiz-explanation hidden" id="quizExplanation">
+                                <strong>Explanation:</strong> <span id="explanationText"></span>
+                            </div>
+                            <button class="quiz-btn hidden" id="nextBtn" onclick="nextQuestion()">
+                                Next Question
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Games Page -->
+                <div id="page-games" class="page hidden animate-fade-in">
+                    <div class="page-header">
+                        <h1 class="page-title font-serif">Fun Games</h1>
+                        <p class="page-subtitle">Take a break and earn some bonus points!</p>
+                    </div>
+                    
+                    <div class="games-grid">
+                        <div class="game-container">
+                            <div class="game-header">
+                                <div class="game-header-top">
+                                    <div class="game-title">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" x2="10" y1="12" y2="12"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="15" x2="15.01" y1="13" y2="13"/><line x1="18" x2="18.01" y1="11" y2="11"/><rect width="20" height="12" x="2" y="6" rx="2"/></svg>
+                                        Business Memory
+                                    </div>
+                                    <button class="game-reset-btn" onclick="initMemoryGame()">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 21h5v-5"/></svg>
+                                        Reset
+                                    </button>
+                                </div>
+                                <div class="game-stats">
+                                    <span>⏱️ <span id="gameTimer">0:00</span></span>
+                                    <span>Moves: <span id="gameMoves">0</span></span>
+                                    <span>Matches: <span id="gameMatches">0</span>/6</span>
+                                </div>
+                            </div>
+                            <div class="game-body">
+                                <div class="memory-grid" id="memoryGrid">
+                                    <!-- Cards will be generated by JS -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="game-placeholder">
+                            <div class="game-placeholder-header">
+                                <div class="game-placeholder-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" x2="10" y1="12" y2="12"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="15" x2="15.01" y1="13" y2="13"/><line x1="18" x2="18.01" y1="11" y2="11"/><rect width="20" height="12" x="2" y="6" rx="2"/></svg>
+                                </div>
+                                <div>
+                                    <h3>Word Scramble</h3>
+                                    <p class="coming-soon">Coming Soon</p>
+                                </div>
+                            </div>
+                            <p>Unscramble business terms and earn points! This game will be available in the next update.</p>
+                        </div>
+
+                        <div class="game-placeholder">
+                            <div class="game-placeholder-header">
+                                <div class="game-placeholder-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" x2="10" y1="12" y2="12"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="15" x2="15.01" y1="13" y2="13"/><line x1="18" x2="18.01" y1="11" y2="11"/><rect width="20" height="12" x="2" y="6" rx="2"/></svg>
+                                </div>
+                                <div>
+                                    <h3>Market Predictions</h3>
+                                    <p class="coming-soon">Coming Soon</p>
+                                </div>
+                            </div>
+                            <p>Predict stock movements and compete with other players! Available in the next update.</p>
+                        </div>
+
+                        <div class="game-placeholder">
+                            <div class="game-placeholder-header">
+                                <div class="game-placeholder-icon">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="6" x2="10" y1="12" y2="12"/><line x1="8" x2="8" y1="10" y2="14"/><line x1="15" x2="15.01" y1="13" y2="13"/><line x1="18" x2="18.01" y1="11" y2="11"/><rect width="20" height="12" x="2" y="6" rx="2"/></svg>
+                                </div>
+                                <div>
+                                    <h3>Speed Read Challenge</h3>
+                                    <p class="coming-soon">Coming Soon</p>
+                                </div>
+                            </div>
+                            <p>Test your reading speed and comprehension! This game will be available in the next update.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Leaderboard Page -->
+                <div id="page-leaderboard" class="page hidden animate-fade-in">
+                    <div class="page-header">
+                        <h1 class="page-title font-serif">Leaderboard</h1>
+                        <p class="page-subtitle">Top readers this month. Keep climbing!</p>
+                    </div>
+                    
+                    <div class="leaderboard">
+                        <div class="leaderboard-item top-1">
+                            <div class="rank"><span class="rank-icon">👑</span></div>
+                            <div class="leaderboard-avatar">PS</div>
+                            <div class="leaderboard-info">
+                                <p class="leaderboard-name">Priya Sharma</p>
+                                <p class="leaderboard-streak">📈 28 day streak</p>
+                            </div>
+                            <div class="leaderboard-points">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                                3,250 <span class="pts">pts</span>
+                            </div>
+                        </div>
+                        <div class="leaderboard-item top-2">
+                            <div class="rank"><span class="rank-icon">🥈</span></div>
+                            <div class="leaderboard-avatar">AK</div>
+                            <div class="leaderboard-info">
+                                <p class="leaderboard-name">Arjun Kapoor</p>
+                                <p class="leaderboard-streak">📈 21 day streak</p>
+                            </div>
+                            <div class="leaderboard-points">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                                2,890 <span class="pts">pts</span>
+                            </div>
+                        </div>
+                        <div class="leaderboard-item top-3">
+                            <div class="rank"><span class="rank-icon">🥉</span></div>
+                            <div class="leaderboard-avatar">NG</div>
+                            <div class="leaderboard-info">
+                                <p class="leaderboard-name">Neha Gupta</p>
+                                <p class="leaderboard-streak">📈 18 day streak</p>
+                            </div>
+                            <div class="leaderboard-points">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                                2,670 <span class="pts">pts</span>
+                            </div>
+                        </div>
+                        <div class="leaderboard-item">
+                            <div class="rank">4</div>
+                            <div class="leaderboard-avatar">RV</div>
+                            <div class="leaderboard-info">
+                                <p class="leaderboard-name">Rahul Verma</p>
+                                <p class="leaderboard-streak">📈 15 day streak</p>
+                            </div>
+                            <div class="leaderboard-points">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                                2,540 <span class="pts">pts</span>
+                            </div>
+                        </div>
+                        <div class="leaderboard-item">
+                            <div class="rank">5</div>
+                            <div class="leaderboard-avatar">AP</div>
+                            <div class="leaderboard-info">
+                                <p class="leaderboard-name">Ananya Patel</p>
+                                <p class="leaderboard-streak">📈 14 day streak</p>
+                            </div>
+                            <div class="leaderboard-points">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                                2,480 <span class="pts">pts</span>
+                            </div>
+                        </div>
+                        <div class="leaderboard-item">
+                            <div class="rank">6</div>
+                            <div class="leaderboard-avatar">VS</div>
+                            <div class="leaderboard-info">
+                                <p class="leaderboard-name">Vikram Singh</p>
+                                <p class="leaderboard-streak">📈 12 day streak</p>
+                            </div>
+                            <div class="leaderboard-points">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                                2,460 <span class="pts">pts</span>
+                            </div>
+                        </div>
+                        <div class="leaderboard-item current-user">
+                            <div class="rank">7</div>
+                            <div class="leaderboard-avatar">SRK</div>
+                            <div class="leaderboard-info">
+                                <p class="leaderboard-name">SRK <span class="you-tag">(You)</span></p>
+                                <p class="leaderboard-streak">📈 12 day streak</p>
+                            </div>
+                            <div class="leaderboard-points">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                                2,450 <span class="pts">pts</span>
+                            </div>
+                        </div>
+                        <div class="leaderboard-item">
+                            <div class="rank">8</div>
+                            <div class="leaderboard-avatar">MR</div>
+                            <div class="leaderboard-info">
+                                <p class="leaderboard-name">Meera Reddy</p>
+                                <p class="leaderboard-streak">📈 10 day streak</p>
+                            </div>
+                            <div class="leaderboard-points">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                                2,340 <span class="pts">pts</span>
+                            </div>
+                        </div>
+                        <div class="leaderboard-item">
+                            <div class="rank">9</div>
+                            <div class="leaderboard-avatar">KM</div>
+                            <div class="leaderboard-info">
+                                <p class="leaderboard-name">Karan Malhotra</p>
+                                <p class="leaderboard-streak">📈 9 day streak</p>
+                            </div>
+                            <div class="leaderboard-points">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                                2,280 <span class="pts">pts</span>
+                            </div>
+                        </div>
+                        <div class="leaderboard-item">
+                            <div class="rank">10</div>
+                            <div class="leaderboard-avatar">DJ</div>
+                            <div class="leaderboard-info">
+                                <p class="leaderboard-name">Divya Joshi</p>
+                                <p class="leaderboard-streak">📈 8 day streak</p>
+                            </div>
+                            <div class="leaderboard-points">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                                2,150 <span class="pts">pts</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Page -->
+                <div id="page-profile" class="page hidden animate-fade-in">
+                    <div class="profile-header-card">
+                        <div class="profile-banner">
+                            <button class="profile-edit-btn">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/><path d="m15 5 4 4"/></svg>
+                            </button>
+                        </div>
+                        <div class="profile-main">
+                            <div class="profile-avatar">SRK</div>
+                            <div class="profile-info">
+                                <div class="profile-name-row">
+                                    <h1 class="profile-name font-serif">SRK</h1>
+                                    <span class="profile-badge">Premium</span>
+                                </div>
+                                <p class="profile-subtitle">Business Enthusiast • MBA Candidate</p>
+                            </div>
+                            <div class="profile-actions">
+                                <button class="profile-btn">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"/><circle cx="12" cy="12" r="3"/></svg>
+                                    Edit Profile
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                            </div>
+                            <div class="stat-value">142</div>
+                            <div class="stat-label">Articles Read</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                            </div>
+                            <div class="stat-value">87%</div>
+                            <div class="stat-label">Quiz Score</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+                            </div>
+                            <div class="stat-value">12 days</div>
+                            <div class="stat-label">Current Streak</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-icon">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                            </div>
+                            <div class="stat-value">#7</div>
+                            <div class="stat-label">Rank</div>
+                        </div>
+                    </div>
+
+                    <div class="eco-impact-card">
+                        <div class="eco-impact-icon">
+                            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
+                        </div>
+                        <div class="eco-impact-info">
+                            <h3>Your Environmental Impact</h3>
+                            <p>By reading digitally, you've helped save <strong id="profilePaperCount">12,847 newspapers</strong> worth of paper!</p>
+                        </div>
+                        <div class="eco-impact-stats">
+                            <div class="eco-impact-value" id="co2Saved">6,424g</div>
+                            <div class="eco-impact-unit">CO₂ Saved</div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <h3 class="card-title">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/></svg>
+                            Weekly Goals
+                        </h3>
+                        <div style="margin-bottom:1rem;">
+                            <div class="progress-label">
+                                <span>Articles Read</span>
+                                <span style="color:var(--muted)">3/5</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 60%"></div>
+                            </div>
+                        </div>
+                        <div style="margin-bottom:1rem;">
+                            <div class="progress-label">
+                                <span>Quizzes Completed</span>
+                                <span style="color:var(--muted)">4/5</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 80%"></div>
+                            </div>
+                        </div>
+                        <div>
+                            <div class="progress-label">
+                                <span>Daily Streak</span>
+                                <span style="color:var(--muted)">✓ Complete</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: 100%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="achievements-card">
+                        <div class="achievements-header">
+                            <h3 class="achievements-title">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--accent)" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+                                Achievements
+                            </h3>
+                            <span class="achievements-count">3/6 earned</span>
+                        </div>
+                        <div class="achievements-grid">
+                            <div class="achievement-item earned">
+                                <div class="achievement-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                                </div>
+                                <div class="achievement-info">
+                                    <p class="achievement-name">First Read ⭐</p>
+                                    <p class="achievement-desc">Read your first article</p>
+                                    <p class="achievement-date">Earned on Dec 10, 2024</p>
+                                </div>
+                            </div>
+                            <div class="achievement-item earned">
+                                <div class="achievement-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5a3 3 0 1 0-5.997.125 4 4 0 0 0-2.526 5.77 4 4 0 0 0 .556 6.588A4 4 0 1 0 12 18Z"/><path d="M12 5a3 3 0 1 1 5.997.125 4 4 0 0 1 2.526 5.77 4 4 0 0 1-.556 6.588A4 4 0 1 1 12 18Z"/></svg>
+                                </div>
+                                <div class="achievement-info">
+                                    <p class="achievement-name">Quiz Master ⭐</p>
+                                    <p class="achievement-desc">Score 100% on a quiz</p>
+                                    <p class="achievement-date">Earned on Dec 15, 2024</p>
+                                </div>
+                            </div>
+                            <div class="achievement-item earned">
+                                <div class="achievement-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.072-2.143-.224-4.054 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.153.433-2.294 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>
+                                </div>
+                                <div class="achievement-info">
+                                    <p class="achievement-name">Week Warrior ⭐</p>
+                                    <p class="achievement-desc">7-day reading streak</p>
+                                    <p class="achievement-date">Earned on Dec 18, 2024</p>
+                                </div>
+                            </div>
+                            <div class="achievement-item">
+                                <div class="achievement-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 22h16a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2H8a2 2 0 0 0-2 2v16a2 2 0 0 1-2 2Zm0 0a2 2 0 0 1-2-2v-9c0-1.1.9-2 2-2h2"/><path d="M18 14h-8"/><path d="M15 18h-5"/><path d="M10 6h8v4h-8V6Z"/></svg>
+                                </div>
+                                <div class="achievement-info">
+                                    <p class="achievement-name">Eco Champion</p>
+                                    <p class="achievement-desc">Save 100 newspapers</p>
+                                    <div class="progress-bar" style="margin-top:0.5rem">
+                                        <div class="progress-fill" style="width: 47%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="achievement-item">
+                                <div class="achievement-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+                                </div>
+                                <div class="achievement-info">
+                                    <p class="achievement-name">Market Expert</p>
+                                    <p class="achievement-desc">Read 50 market articles</p>
+                                    <div class="progress-bar" style="margin-top:0.5rem">
+                                        <div class="progress-fill" style="width: 68%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="achievement-item">
+                                <div class="achievement-icon">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="6"/><path d="M15.477 12.89 17 22l-5-3-5 3 1.523-9.11"/></svg>
+                                </div>
+                                <div class="achievement-info">
+                                    <p class="achievement-name">Scholar</p>
+                                    <p class="achievement-desc">Read 200 articles</p>
+                                    <div class="progress-bar" style="margin-top:0.5rem">
+                                        <div class="progress-fill" style="width: 35%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings Page -->
+                <div id="page-settings" class="page hidden animate-fade-in">
+                    <div class="page-header">
+                        <h1 class="page-title font-serif">Settings</h1>
+                        <p class="page-subtitle">Manage your briefing preferences.</p>
+                    </div>
+
+                    <div class="card" style="max-width:600px;">
+                        <h3 class="card-title">Notifications</h3>
+                        <p style="font-size:0.9rem;color:var(--muted);margin-bottom:1rem;">How you want to receive your daily briefing.</p>
+                        
+                        <div class="setting-row">
+                            <div>
+                                <p class="setting-label">Daily Email Digest</p>
+                                <p class="setting-desc">Receive a summary every morning at 7 AM.</p>
+                            </div>
+                            <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+                        </div>
+                        <div class="setting-row">
+                            <div>
+                                <p class="setting-label">Push Notifications</p>
+                                <p class="setting-desc">Get alerted for breaking news.</p>
+                            </div>
+                            <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+                        </div>
+                    </div>
+
+                    <div class="card" style="max-width:600px;">
+                        <h3 class="card-title">Content Preferences</h3>
+                        <p style="font-size:0.9rem;color:var(--muted);margin-bottom:1rem;">Customize your news feed.</p>
+                        
+                        <div class="setting-row">
+                            <p class="setting-label">Finance</p>
+                            <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+                        </div>
+                        <div class="setting-row">
+                            <p class="setting-label">Technology</p>
+                            <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+                        </div>
+                        <div class="setting-row">
+                            <p class="setting-label">Management</p>
+                            <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+                        </div>
+                        <div class="setting-row">
+                            <p class="setting-label">Strategy</p>
+                            <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+                        </div>
+                        <div class="setting-row">
+                            <p class="setting-label">Global Economics</p>
+                            <div class="toggle active" onclick="this.classList.toggle('active')"></div>
+                        </div>
+                    </div>
+
+                    <div style="max-width:600px;text-align:right;">
+                        <button class="save-btn">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // State
+        let currentPage = 'home';
+        let papersSaved = 12847;
+        
+        // Quiz State
+        let quizScore = 0;
+        let currentQuestion = 0;
+        let quizComplete = false;
+        const questions = [
+            {
+                question: "Which company recently became the first to reach a $3 trillion market cap?",
+                options: ["Microsoft", "Apple", "Amazon", "Google"],
+                correct: 1,
+                explanation: "Apple became the first company to reach a $3 trillion market capitalization in January 2024."
+            },
+            {
+                question: "What does ESG stand for in business?",
+                options: ["Economic Security Goals", "Environmental, Social, Governance", "Enterprise System Growth", "Equity Share Guidelines"],
+                correct: 1,
+                explanation: "ESG stands for Environmental, Social, and Governance - criteria used to evaluate a company's ethical impact."
+            },
+            {
+                question: "Which central bank recently paused interest rate hikes?",
+                options: ["Bank of Japan", "European Central Bank", "Federal Reserve", "All of the above"],
+                correct: 3,
+                explanation: "Major central banks including the Fed, ECB, and BOJ have all signaled pauses in rate hikes."
+            }
+        ];
+
+        // Memory Game State
+        const emojis = ["📈", "💹", "💰", "📊", "🏦", "💳"];
+        let memoryCards = [];
+        let flippedCards = [];
+        let matches = 0;
+        let moves = 0;
+        let gameTimer = 0;
+        let timerInterval = null;
+
+        // Navigation
+        function navigateTo(page) {
+            currentPage = page;
+            document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
+            document.getElementById('page-' + page).classList.remove('hidden');
+            
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+                if (item.dataset.page === page) {
+                    item.classList.add('active');
+                }
+            });
+
+            // Init memory game when navigating to games
+            if (page === 'games') {
+                initMemoryGame();
+            }
+        }
+
+        // Add click handlers to nav items
+        document.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                navigateTo(item.dataset.page);
+                closeMobileMenu();
+            });
+        });
+
+        // Mobile Menu
+        function toggleMobileMenu() {
+            document.getElementById('mobileOverlay').classList.toggle('active');
+            document.getElementById('mobileSidebar').classList.toggle('active');
+        }
+
+        function closeMobileMenu() {
+            document.getElementById('mobileOverlay').classList.remove('active');
+            document.getElementById('mobileSidebar').classList.remove('active');
+        }
+
+        // Clone nav items to mobile
+        const desktopNav = document.querySelector('#desktopSidebar .nav-section');
+        const mobileNav = document.getElementById('mobileNav');
+        mobileNav.innerHTML = desktopNav.innerHTML;
+        mobileNav.querySelectorAll('.nav-item').forEach(item => {
+            item.addEventListener('click', () => {
+                navigateTo(item.dataset.page);
+                closeMobileMenu();
+            });
+        });
+
+        // Papers Saved Counter
+        function updatePaperCount() {
+            papersSaved += Math.floor(Math.random() * 3) + 1;
+            document.getElementById('paperCount').textContent = papersSaved.toLocaleString();
+            document.getElementById('mobilePaperCount').textContent = papersSaved.toLocaleString();
+            document.getElementById('profilePaperCount').textContent = papersSaved.toLocaleString() + ' newspapers';
+            document.getElementById('co2Saved').textContent = Math.round(papersSaved * 0.5).toLocaleString() + 'g';
+        }
+        setInterval(updatePaperCount, 5000);
+
+        // Quiz Functions
+        function renderQuiz() {
+            const q = questions[currentQuestion];
+            document.getElementById('questionText').textContent = q.question;
+            document.querySelector('.quiz-question-num').textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+            
+            const optionsHtml = q.options.map((opt, i) => `
+                <button class="quiz-option" onclick="selectAnswer(${i})">
+                    <span class="option-letter">${String.fromCharCode(65 + i)}</span>
+                    <span>${opt}</span>
+                </button>
+            `).join('');
+            document.getElementById('quizOptions').innerHTML = optionsHtml;
+            
+            // Update progress dots
+            const dots = document.querySelectorAll('.quiz-progress-dot');
+            dots.forEach((dot, i) => {
+                dot.classList.remove('completed', 'current');
+                if (i < currentQuestion) dot.classList.add('completed');
+                if (i === currentQuestion) dot.classList.add('current');
+            });
+            
+            document.getElementById('quizExplanation').classList.add('hidden');
+            document.getElementById('nextBtn').classList.add('hidden');
+        }
+
+        function selectAnswer(index) {
+            const q = questions[currentQuestion];
+            const options = document.querySelectorAll('.quiz-option');
+            
+            options.forEach((opt, i) => {
+                opt.disabled = true;
+                if (i === q.correct) {
+                    opt.classList.add('correct');
+                } else if (i === index && i !== q.correct) {
+                    opt.classList.add('wrong');
+                }
+            });
+
+            if (index === q.correct) {
+                quizScore += 10;
+                document.getElementById('quizScore').textContent = quizScore;
+            }
+
+            document.getElementById('explanationText').textContent = q.explanation;
+            document.getElementById('quizExplanation').classList.remove('hidden');
+            document.getElementById('nextBtn').classList.remove('hidden');
+            document.getElementById('nextBtn').textContent = currentQuestion < questions.length - 1 ? 'Next Question' : 'See Results';
+        }
+
+        function nextQuestion() {
+            if (currentQuestion < questions.length - 1) {
+                currentQuestion++;
+                renderQuiz();
+            } else {
+                showQuizComplete();
+            }
+        }
+
+        function showQuizComplete() {
+            document.getElementById('quizBody').innerHTML = `
+                <div class="quiz-complete">
+                    <div class="quiz-trophy">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                    </div>
+                    <h3 class="font-serif">Quiz Complete!</h3>
+                    <p style="color:var(--muted)">You scored</p>
+                    <div class="quiz-final-score">${quizScore}</div>
+                    <p style="color:var(--muted);margin-bottom:1.5rem">out of ${questions.length * 10} points</p>
+                    <button class="quiz-btn" onclick="resetQuiz()">Try Again</button>
+                </div>
+            `;
+        }
+
+        function resetQuiz() {
+            currentQuestion = 0;
+            quizScore = 0;
+            document.getElementById('quizScore').textContent = '0';
+            document.getElementById('quizBody').innerHTML = `
+                <p class="quiz-question-num">Question 1 of 3</p>
+                <h3 class="quiz-question font-serif" id="questionText"></h3>
+                <div class="quiz-options" id="quizOptions"></div>
+                <div class="quiz-explanation hidden" id="quizExplanation">
+                    <strong>Explanation:</strong> <span id="explanationText"></span>
+                </div>
+                <button class="quiz-btn hidden" id="nextBtn" onclick="nextQuestion()">Next Question</button>
+            `;
+            renderQuiz();
+        }
+
+        // Memory Game Functions
+        function initMemoryGame() {
+            const pairs = [...emojis, ...emojis];
+            memoryCards = pairs.map((emoji, id) => ({ id, emoji, flipped: false, matched: false })).sort(() => Math.random() - 0.5);
+            flippedCards = [];
+            matches = 0;
+            moves = 0;
+            gameTimer = 0;
+            
+            if (timerInterval) clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                gameTimer++;
+                document.getElementById('gameTimer').textContent = formatTime(gameTimer);
+            }, 1000);
+
+            renderMemoryGame();
+            document.getElementById('gameMoves').textContent = '0';
+            document.getElementById('gameMatches').textContent = '0';
+        }
+
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins}:${secs.toString().padStart(2, '0')}`;
+        }
+
+        function renderMemoryGame() {
+            const grid = document.getElementById('memoryGrid');
+            grid.innerHTML = memoryCards.map((card, i) => `
+                <button class="memory-card ${card.flipped || card.matched ? 'flipped' : ''} ${card.matched ? 'matched' : ''}" 
+                        onclick="flipCard(${i})" ${card.matched ? 'disabled' : ''}>
+                    ${card.flipped || card.matched ? card.emoji : ''}
+                </button>
+            `).join('');
+        }
+
+        function flipCard(index) {
+            if (flippedCards.length === 2) return;
+            if (memoryCards[index].flipped || memoryCards[index].matched) return;
+
+            memoryCards[index].flipped = true;
+            flippedCards.push(index);
+            renderMemoryGame();
+
+            if (flippedCards.length === 2) {
+                moves++;
+                document.getElementById('gameMoves').textContent = moves;
+                
+                const [first, second] = flippedCards;
+                if (memoryCards[first].emoji === memoryCards[second].emoji) {
+                    setTimeout(() => {
+                        memoryCards[first].matched = true;
+                        memoryCards[second].matched = true;
+                        matches++;
+                        document.getElementById('gameMatches').textContent = matches;
+                        flippedCards = [];
+                        renderMemoryGame();
+                        
+                        if (matches === 6) {
+                            clearInterval(timerInterval);
+                            showGameComplete();
+                        }
+                    }, 500);
+                } else {
+                    setTimeout(() => {
+                        memoryCards[first].flipped = false;
+                        memoryCards[second].flipped = false;
+                        flippedCards = [];
+                        renderMemoryGame();
+                    }, 1000);
+                }
+            }
+        }
+
+        function showGameComplete() {
+            const points = Math.max(100 - moves * 5 - gameTimer, 10);
+            document.querySelector('.game-body').innerHTML = `
+                <div class="game-complete">
+                    <div class="quiz-trophy">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></svg>
+                    </div>
+                    <h3 class="font-serif">Congratulations!</h3>
+                    <p style="color:var(--muted)">Completed in ${formatTime(gameTimer)} with ${moves} moves</p>
+                    <div class="quiz-final-score">+${points} pts</div>
+                    <button class="quiz-btn" onclick="initMemoryGame()">Play Again</button>
+                </div>
+            `;
+        }
+
+        // Init
+        renderQuiz();
+    </script>
+</body>
+</html>

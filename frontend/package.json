@@ -1,0 +1,25 @@
+{
+    "name": "bizai-frontend",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview",
+        "lint": "echo \"no linter configured\""
+    },
+    "dependencies": {
+        "axios": "^1.7.7",
+        "firebase": "^10.7.0",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
+        "react-youtube": "^10.1.0"
+    },
+    "devDependencies": {
+        "@vitejs/plugin-react": "^4.3.4",
+        "autoprefixer": "^10.4.20",
+        "postcss": "^8.4.49",
+        "tailwindcss": "^3.4.15",
+        "vite": "^6.0.0"
+    }
+}
