@@ -20,6 +20,7 @@ import ProfilePage from './pages/ProfilePage.jsx';
 import { NewsProvider } from './context/NewsContext.jsx';
 import { SavedArticlesProvider } from './context/SavedArticlesContext.jsx';
 import { AuthProvider, useAuth } from './context/AuthContext.jsx';
+import AsbHomePage from './pages/AsbHomePage.jsx';
 
 const PAGES = {
   home: 'home',
@@ -34,7 +35,8 @@ const PAGES = {
   quiz: 'quiz',
   games: 'games',
   leaderboard: 'leaderboard',
-  profile: 'profile'
+  profile: 'profile',
+  asb_home:'asb_home'
 };
 
 function AppContent() {
@@ -99,6 +101,8 @@ function AppContent() {
         return <LeaderboardPage />;
       case PAGES.profile:
         return <ProfilePage />;
+      case PAGES.asb_home:
+        return <AsbHomePage/>
       default:
         return <DailyBriefingPage />;
     }

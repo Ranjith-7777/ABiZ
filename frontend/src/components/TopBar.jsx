@@ -43,7 +43,7 @@ export default function TopBar() {
 
         {/* Center Info */}
         <div className="hidden lg:block flex-1 mx-6">
-          <p className="font-semibold text-sm text-text">
+          <p className="font-semibold text-sm text-text text-blue-100">
             Welcome, {isAuthenticated && user ? user.displayName : 'Guest'}.
           </p>
           <div className="flex items-center gap-4 mt-1">

@@ -15,7 +15,8 @@ const NAV_ITEMS = [
   { id: 'quiz', label: 'Daily Quiz' },
   { id: 'games', label: 'Fun Games' },
   { id: 'leaderboard', label: 'Leaderboard' },
-  { id: 'profile', label: 'Profile' }
+  { id: 'profile', label: 'Profile' },
+  {id:'asb_home',label:'ASB Home Page'}
 ];
 
 export default function Sidebar({ currentPage, onNavigate }) {
