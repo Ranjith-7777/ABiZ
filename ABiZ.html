@@ -1,0 +1,1346 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ABiZ - Career Excellence Hub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: #1a1a1a;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 40px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            border-radius: 16px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header h1 {
+            font-family: 'Playfair Display', serif;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
+        }
+        
+        .header-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.95;
+            margin-bottom: 20px;
+        }
+        
+        .header-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .stat-box {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .nav-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+            border-bottom: 2px solid #ddd;
+            padding-bottom: 15px;
+        }
+        
+        .nav-tab {
+            padding: 12px 24px;
+            background: white;
+            border: 2px solid #2a5298;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            color: #2a5298;
+            transition: all 0.3s;
+        }
+        
+        .nav-tab:hover {
+            background: #f0f4ff;
+        }
+        
+        .nav-tab.active {
+            background: #2a5298;
+            color: white;
+            box-shadow: 0 4px 12px rgba(42, 82, 152, 0.3);
+        }
+        
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+        
+        .filter-btn {
+            padding: 8px 16px;
+            background: #f0f4ff;
+            border: 1px solid #2a5298;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 500;
+            color: #2a5298;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+        }
+        
+        .filter-btn:hover,
+        .filter-btn.active {
+            background: #2a5298;
+            color: white;
+        }
+        
+        .section {
+            display: none;
+        }
+        
+        .section.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #2a5298;
+            color: #1a1a1a;
+        }
+        
+        .section-icon {
+            font-size: 2.5rem;
+        }
+        
+        .highlight {
+            background: #fff3cd;
+            padding: 15px 20px;
+            border-left: 4px solid #ffc107;
+            border-radius: 6px;
+            margin-bottom: 25px;
+            color: #856404;
+            font-size: 0.95rem;
+        }
+        
+        .cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 22px;
+            margin-bottom: 40px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 14px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-top: 5px solid #2a5298;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card:hover {
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+            transform: translateY(-8px);
+        }
+        
+        .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 18px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .card-icon {
+            font-size: 2rem;
+        }
+        
+        .card-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+        
+        .card-content {
+            padding: 20px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card-meta {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+        
+        .meta-tag {
+            background: #f0f4ff;
+            color: #2a5298;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .card-desc {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 12px;
+            flex: 1;
+            font-size: 0.95rem;
+        }
+        
+        .card-info {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            color: #555;
+            margin-bottom: 12px;
+            line-height: 1.5;
+        }
+        
+        .card-btns {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .btn {
+            flex: 1;
+            padding: 10px 14px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+            text-align: center;
+        }
+        
+        .btn-primary {
+            background: #2a5298;
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            background: #1e3c72;
+            box-shadow: 0 4px 12px rgba(42, 82, 152, 0.3);
+        }
+        
+        .btn-secondary {
+            background: #f0f4ff;
+            color: #2a5298;
+            border: 1px solid #2a5298;
+        }
+        
+        .btn-secondary:hover {
+            background: #e8ecff;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 18px;
+            margin-bottom: 40px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            border-top: 4px solid #667eea;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #2a5298;
+            margin-bottom: 6px;
+        }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .interview-sidebar {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .interview-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .interview-item {
+            padding: 12px;
+            cursor: pointer;
+            border-radius: 8px;
+            border-left: 4px solid #2a5298;
+            background: #f8f9fa;
+            transition: all 0.2s;
+        }
+        
+        .interview-item:hover {
+            background: #e8ecff;
+        }
+        
+        .interview-item.active {
+            background: #2a5298;
+            color: white;
+            border-left-color: white;
+        }
+        
+        .interview-item-title {
+            font-weight: 600;
+            font-size: 0.95rem;
+        }
+        
+        .interview-item-role {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            margin-top: 4px;
+        }
+        
+        .interview-details {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .interview-header {
+            margin-bottom: 20px;
+        }
+        
+        .interview-company {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2a5298;
+            margin-bottom: 8px;
+        }
+        
+        .interview-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 12px;
+            margin-bottom: 15px;
+        }
+        
+        .meta-box {
+            padding: 12px;
+            background: #f0f4ff;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .meta-box-value {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #2a5298;
+        }
+        
+        .meta-box-label {
+            font-size: 0.8rem;
+            color: #666;
+            margin-top: 4px;
+        }
+        
+        .round-box {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .round-type {
+            font-weight: 700;
+            font-size: 1rem;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+        
+        .round-topics {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .topic-tag {
+            background: #e8ecff;
+            color: #2a5298;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+        
+        .success-bar {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+        
+        .bar {
+            width: 100px;
+            height: 6px;
+            background: #ddd;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        
+        .bar-fill {
+            height: 100%;
+            background: #28a745;
+        }
+        
+        .prep-guide {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid #81c784;
+        }
+        
+        .prep-guide h4 {
+            color: #2e7d32;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+        
+        .prep-steps {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .prep-step {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            color: #1b5e20;
+            font-size: 0.95rem;
+        }
+        
+        .step-num {
+            width: 28px;
+            height: 28px;
+            background: #2e7d32;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+            font-size: 0.9rem;
+        }
+        
+        .skill-tag {
+            display: inline-block;
+            background: #667eea;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin: 4px 4px 4px 0;
+        }
+        
+        .rating {
+            color: #ffc107;
+            font-size: 1.1rem;
+            letter-spacing: 1px;
+        }
+        
+        .skill-demand-item {
+            margin-bottom: 18px;
+        }
+        
+        .skill-demand-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #1a1a1a;
+        }
+        
+        .skill-demand-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+        
+        .skill-demand-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.3s ease;
+        }
+        
+        .insight-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+            margin-bottom: 40px;
+        }
+        
+        .insight-card {
+            background: white;
+            padding: 18px;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+        
+        .insight-title {
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+        
+        .insight-desc {
+            color: #666;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            margin-bottom: 10px;
+        }
+        
+        .confidence-badge {
+            display: inline-block;
+            background: #2a5298;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .difficulty-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .difficulty-easy {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .difficulty-medium {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .difficulty-hard {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: #666;
+            border-top: 2px solid rgba(42, 82, 152, 0.2);
+            margin-top: 60px;
+            font-size: 0.9rem;
+        }
+        
+        .footer-logo {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.8rem;
+            color: #2a5298;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            .section-title {
+                font-size: 1.5rem;
+            }
+            .cards-grid {
+                grid-template-columns: 1fr;
+            }
+            .nav-tabs {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <h1>🎓 ABiZ - Career Excellence Hub</h1>
+        <div class="header-subtitle">Placement Intelligence & Interview Preparation for Tech & Business Roles</div>
+        <div class="header-stats">
+            <div class="stat-box">
+                <div class="stat-number">95%</div>
+                <div class="stat-label">Placement Rate</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">5000+</div>
+                <div class="stat-label">Companies</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">50K+</div>
+                <div class="stat-label">Interview Q&As</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">₹12-50 LPA</div>
+                <div class="stat-label">Salary Range</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Navigation Tabs -->
+        <div class="nav-tabs">
+            <div class="nav-tab active" onclick="switchSection('placement')">💼 Placement Intelligence</div>
+            <div class="nav-tab" onclick="switchSection('interviews')">🎤 Interview Repository</div>
+        </div>
+
+        <!-- PLACEMENT INTELLIGENCE SECTION -->
+        <div id="placement" class="section active">
+            <div class="highlight">
+                📊 <strong>South India Opportunities:</strong> Bangalore, Hyderabad, Chennai lead with diverse placements across IT, Finance, Consulting & Management roles. Average package: ₹12-50 LPA.
+            </div>
+
+            <!-- Domain Filter -->
+            <div class="filter-tabs">
+                <button class="filter-btn active" onclick="filterDomain('all')">All Domains</button>
+                <button class="filter-btn" onclick="filterDomain('tech')">🖥️ Technology</button>
+                <button class="filter-btn" onclick="filterDomain('finance')">💰 Finance</button>
+                <button class="filter-btn" onclick="filterDomain('consulting')">📊 Consulting</button>
+                <button class="filter-btn" onclick="filterDomain('management')">🏆 Management</button>
+            </div>
+
+            <!-- Technology Companies -->
+            <div class="section-title"><span class="section-icon">🖥️</span> Technology Companies</div>
+            <div class="cards-grid" id="tech-cards">
+                <div class="card" data-domain="tech">
+                    <div class="card-header"><span class="card-icon">💻</span><span class="card-title">Google</span></div>
+                    <div class="card-content">
+                        <div class="card-meta"><span class="meta-tag">Bangalore</span></div>
+                        <div class="card-desc">Software Engineer, Product Manager, Data Scientist roles. World-leading AI & ML company.</div>
+                        <div class="card-info"><strong>CTC:</strong> ₹40-60 LPA | <strong>Skills:</strong> DSA, System Design, Python/Java</div>
+                        <div class="card-btns"><button class="btn btn-primary">View Jobs</button><button class="btn btn-secondary">Q&A</button></div>
+                    </div>
+                </div>
+                <div class="card" data-domain="tech">
+                    <div class="card-header"><span class="card-icon">☁️</span><span class="card-title">Microsoft</span></div>
+                    <div class="card-content">
+                        <div class="card-meta"><span class="meta-tag">Bangalore, Hyderabad</span></div>
+                        <div class="card-desc">Cloud Engineer, DevOps, Backend Developer. Azure cloud infrastructure leader.</div>
+                        <div class="card-info"><strong>CTC:</strong> ₹38-55 LPA | <strong>Skills:</strong> Azure, Kubernetes, Microservices</div>
+                        <div class="card-btns"><button class="btn btn-primary">View Jobs</button><button class="btn btn-secondary">Q&A</button></div>
+                    </div>
+                </div>
+                <div class="card" data-domain="tech">
+                    <div class="card-header"><span class="card-icon">📦</span><span class="card-title">Amazon</span></div>
+                    <div class="card-content">
+                        <div class="card-meta"><span class="meta-tag">Bangalore, Hyderabad</span></div>
+                        <div class="card-desc">SDE, Data Engineer, Operations. Global e-commerce & cloud leader.</div>
+                        <div class="card-info"><strong>CTC:</strong> ₹40-58 LPA | <strong>Skills:</strong> AWS, Distributed Systems, Problem Solving</div>
+                        <div class="card-btns"><button class="btn btn-primary">View Jobs</button><button class="btn btn-secondary">Q&A</button></div>
+                    </div>
+                </div>
+                <div class="card" data-domain="tech">
+                    <div class="card-header"><span class="card-icon">🔷</span><span class="card-title">TCS</span></div>
+                    <div class="card-content">
+                        <div class="card-meta"><span class="meta-tag">Bangalore, Hyderabad, Chennai</span></div>
+                        <div class="card-desc">Software Engineer, Associate Consultant. India's largest IT company.</div>
+                        <div class="card-info"><strong>CTC:</strong> ₹8-12 LPA | <strong>Skills:</strong> Java, Python, Cloud, SQL</div>
+                        <div class="card-btns"><button class="btn btn-primary">View Jobs</button><button class="btn btn-secondary">Q&A</button></div>
+                    </div>
+                </div>
+                <div class="card" data-domain="tech">
+                    <div class="card-header"><span class="card-icon">🔵</span><span class="card-title">Infosys</span></div>
+                    <div class="card-content">
+                        <div class="card-meta"><span class="meta-tag">Bangalore, Hyderabad, Pune</span></div>
+                        <div class="card-desc">Systems Engineer, Software Developer. Global IT consulting leader.</div>
+                        <div class="card-info"><strong>CTC:</strong> ₹9-13 LPA | <strong>Skills:</strong> C++, Java, AWS, Agile</div>
+                        <div class="card-btns"><button class="btn btn-primary">View Jobs</button><button class="btn btn-secondary">Q&A</button></div>
+                    </div>
+                </div>
+                <div class="card" data-domain="tech">
+                    <div class="card-header"><span class="card-icon">⚡</span><span class="card-title">NVIDIA</span></div>
+                    <div class="card-content">
+                        <div class="card-meta"><span class="meta-tag">Bangalore</span></div>
+                        <div class="card-desc">AI/ML Engineer, CUDA Developer. GPU computing & AI innovation leader.</div>
+                        <div class="card-info"><strong>CTC:</strong> ₹18-25 LPA | <strong>Skills:</strong> CUDA, C++, Deep Learning</div>
+                        <div class="card-btns"><button class="btn btn-primary">View Jobs</button><button class="btn btn-secondary">Q&A</button></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Finance Companies -->
+            <div class="section-title"><span class="section-icon">💰</span> Finance & Trading</div>
+            <div class="cards-grid" id="finance-cards">
+                <div class="card" data-domain="finance">
+                    <div class="card-header"><span class="card-icon">📊</span><span class="card-title">Goldman Sachs</span></div>
+                    <div class="card-content">
+                        <div class="card-meta"><span class="meta-tag">Bangalore</span></div>
+                        <div class="card-desc">Quantitative Analyst, Trading Systems, Risk Analysis roles.</div>
+                        <div class="card-info"><strong>CTC:</strong> ₹50-80 LPA | <strong>Skills:</strong> C++, Python, Finance, Algorithms</div>
+                        <div class="card-btns"><button class="btn btn-primary">View Jobs</button><button class="btn btn-secondary">Q&A</button></div>
+                    </div>
+                </div>
+                <div class="card" data-domain="finance">
+                    <div class="card-header"><span class="card-icon">🏦</span><span class="card-title">ICICI Bank</span></div>
+                    <div class="card-content">
+                        <div class="card-meta"><span class="meta-tag">Hyderabad, Bangalore</span></div>
+                        <div class="card-desc">Credit Analyst, Risk Manager, Financial Analyst positions.</div>
+                        <div class="card-info"><strong>CTC:</strong> ₹10-18 LPA | <strong>Skills:</strong> Finance, Excel, Risk Analysis, SQL</div>
+                        <div class="card-btns"><button class="btn btn-primary">View Jobs</button><button class="btn btn-secondary">Q&A</button></div>
+                    </div>
+                </div>
+                <div class="card" data-domain="finance">
+                    <div class="card-header"><span class="card-icon">💳</span><span class="card-title">Flipkart Finance</span></div>
+                    <div class="card-content">
+                        <div class="card-meta"><span class="meta-tag">Bangalore</span></div>
+                        <div class="card-desc">Financial Analyst, Treasury Manager, Investment roles.</div>
+                        <div class="card-info"><strong>CTC:</strong> ₹15-25 LPA | <strong>Skills:</strong> Financial Modeling, Analytics, Python</div>
+                        <div class="card-btns"><button class="btn btn-primary">View Jobs</button><button class="btn btn-secondary">Q&A</button></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Consulting Companies -->
+            <div class="section-title"><span class="section-icon">📊</span> Management Consulting</div>
+            <div class="cards-grid" id="consulting-cards">
+                <div class="card" data-domain="consulting">
+                    <div class="card-header"><span class="card-icon">🎯</span><span class="card-title">McKinsey & Co</span></div>
+                    <div class="card-content">
+                        <div class="card-meta"><span class="meta-tag">Bangalore, Hyderabad</span></div>
+                        <div class="card-desc">Business Analyst, Associate Consultant. Elite management consulting firm.</div>
+                        <div class="card-info"><strong>CTC:</strong> ₹25-40 LPA | <strong>Skills:</strong> Case Study, Communication, Analytics</div>
+                        <div class="card-btns"><button class="btn btn-primary">View Jobs</button><button class="btn btn-secondary">Q&A</button></div>
+                    </div>
+                </div>
+                <div class="card" data-domain="consulting">
+                    <div class="card-header"><span class="card-icon">🏢</span><span class="card-title">Deloitte</span></div>
+                    <div class="card-content">
+                        <div class="card-meta"><span class="meta-tag">Bangalore, Chennai, Hyderabad</span></div>
+                        <div class="card-desc">Consulting, Business Analyst, Audit & Risk roles.</div>
+                        <div class="card-info"><strong>CTC:</strong> ₹12-20 LPA | <strong>Skills:</strong> Business Acumen, Excel, Communication</div>
+                        <div class="card-btns"><button class="btn btn-primary">View Jobs</button><button class="btn btn-secondary">Q&A</button></div>
+                    </div>
+                </div>
+                <div class="card" data-domain="consulting">
+                    <div class="card-header"><span class="card-icon">📈</span><span class="card-title">BCG</span></div>
+                    <div class="card-content">
+                        <div class="card-meta"><span class="meta-tag">Bangalore</span></div>
+                        <div class="card-desc">Business Analyst, Project Leader, Strategy Consultant.</div>
+                        <div class="card-info"><strong>CTC:</strong> ₹28-42 LPA | <strong>Skills:</strong> Strategic Thinking, Case Study, Analytics</div>
+                        <div class="card-btns"><button class="btn btn-primary">View Jobs</button><button class="btn btn-secondary">Q&A</button></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Salary Trends -->
+            <div class="section-title"><span class="section-icon">💰</span> Salary Trends by Role</div>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-header"><span class="card-icon">💻</span><span class="card-title">Software Developer</span></div>
+                    <div class="card-content">
+                        <div class="card-info"><strong>Starting:</strong> ₹7-9 LPA | <strong>With Bonus:</strong> ₹9-12 LPA<br><strong>3-Year Growth:</strong> 40-50% | <strong>Peak:</strong> ₹15-20 LPA</div>
+                        <div style="margin-top:10px;"><strong style="color:#2a5298;">Key Skills:</strong><br>
+                            <span class="skill-tag">Java</span><span class="skill-tag">Python</span><span class="skill-tag">React</span><span class="skill-tag">AWS</span></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><span class="card-icon">🤖</span><span class="card-title">AI/ML Engineer</span></div>
+                    <div class="card-content">
+                        <div class="card-info"><strong>Starting:</strong> ₹10-14 LPA | <strong>With Bonus:</strong> ₹14-18 LPA<br><strong>3-Year Growth:</strong> 50-60% | <strong>Peak:</strong> ₹25-35 LPA</div>
+                        <div style="margin-top:10px;"><strong style="color:#2a5298;">Key Skills:</strong><br>
+                            <span class="skill-tag">Python</span><span class="skill-tag">TensorFlow</span><span class="skill-tag">PyTorch</span><span class="skill-tag">Deep Learning</span></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><span class="card-icon">📊</span><span class="card-title">Business Analyst (Consulting)</span></div>
+                    <div class="card-content">
+                        <div class="card-info"><strong>Starting:</strong> ₹12-16 LPA | <strong>With Bonus:</strong> ₹15-20 LPA<br><strong>3-Year Growth:</strong> 45-55% | <strong>Peak:</strong> ₹30-45 LPA</div>
+                        <div style="margin-top:10px;"><strong style="color:#2a5298;">Key Skills:</strong><br>
+                            <span class="skill-tag">Case Study</span><span class="skill-tag">Excel</span><span class="skill-tag">Analytics</span><span class="skill-tag">Communication</span></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><span class="card-icon">💰</span><span class="card-title">Financial Analyst</span></div>
+                    <div class="card-content">
+                        <div class="card-info"><strong>Starting:</strong> ₹10-15 LPA | <strong>With Bonus:</strong> ₹13-18 LPA<br><strong>3-Year Growth:</strong> 35-50% | <strong>Peak:</strong> ₹25-40 LPA</div>
+                        <div style="margin-top:10px;"><strong style="color:#2a5298;">Key Skills:</strong><br>
+                            <span class="skill-tag">Finance</span><span class="skill-tag">Modeling</span><span class="skill-tag">Python</span><span class="skill-tag">SQL</span></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Most Demanded Skills -->
+            <div class="section-title"><span class="section-icon">⚡</span> Most Demanded Skills</div>
+            <div style="background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); margin-bottom: 40px;">
+                <div class="skill-demand-item">
+                    <div class="skill-demand-label">
+                        <span>Python</span>
+                        <span style="color: #2a5298; font-weight: 700;">85%</span>
+                    </div>
+                    <div class="skill-demand-bar">
+                        <div class="skill-demand-fill" style="width: 85%;"></div>
+                    </div>
+                </div>
+                <div class="skill-demand-item">
+                    <div class="skill-demand-label">
+                        <span>System Design</span>
+                        <span style="color: #2a5298; font-weight: 700;">72%</span>
+                    </div>
+                    <div class="skill-demand-bar">
+                        <div class="skill-demand-fill" style="width: 72%;"></div>
+                    </div>
+                </div>
+                <div class="skill-demand-item">
+                    <div class="skill-demand-label">
+                        <span>Cloud (AWS/Azure)</span>
+                        <span style="color: #2a5298; font-weight: 700;">68%</span>
+                    </div>
+                    <div class="skill-demand-bar">
+                        <div class="skill-demand-fill" style="width: 68%;"></div>
+                    </div>
+                </div>
+                <div class="skill-demand-item">
+                    <div class="skill-demand-label">
+                        <span>Data Structures</span>
+                        <span style="color: #2a5298; font-weight: 700;">95%</span>
+                    </div>
+                    <div class="skill-demand-bar">
+                        <div class="skill-demand-fill" style="width: 95%;"></div>
+                    </div>
+                </div>
+                <div class="skill-demand-item">
+                    <div class="skill-demand-label">
+                        <span>Communication</span>
+                        <span style="color: #2a5298; font-weight: 700;">80%</span>
+                    </div>
+                    <div class="skill-demand-bar">
+                        <div class="skill-demand-fill" style="width: 80%;"></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- AI-Generated Insights -->
+            <div class="section-title"><span class="section-icon">🤖</span> AI-Generated Market Insights</div>
+            <div class="insight-cards">
+                <div class="insight-card">
+                    <div class="insight-title">AI/ML Roles Dominating Market</div>
+                    <div class="insight-desc">AI/ML roles dominating 27% of all openings this season across top 50 companies.</div>
+                    <div style="color: #999; font-size: 0.85rem; margin-top: 10px;">
+                        Analyzed 500+ job postings across top 50 companies
+                        <span class="confidence-badge" style="margin-left: 8px;">92% confident</span>
+                    </div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-title">Cloud Skills Critical</div>
+                    <div class="insight-desc">Cloud skills (AWS/Azure) in 68% of backend roles with 20% higher salary premiums.</div>
+                    <div style="color: #999; font-size: 0.85rem; margin-top: 10px;">
+                        Cross-referenced 200+ technical specifications
+                        <span class="confidence-badge" style="margin-left: 8px;">88% confident</span>
+                    </div>
+                </div>
+                <div class="insight-card">
+                    <div class="insight-title">System Design Interviews Rising</div>
+                    <div class="insight-desc">System design interviews increased 45% YoY across major tech companies in South India.</div>
+                    <div style="color: #999; font-size: 0.85rem; margin-top: 10px;">
+                        Tracked interview patterns from 2024 to 2025
+                        <span class="confidence-badge" style="margin-left: 8px;">85% confident</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Placement Stats -->
+            <div class="section-title"><span class="section-icon">📈</span> Placement Insights</div>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value">92%</div>
+                    <div class="stat-label">Avg Placement Rate</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">₹18 LPA</div>
+                    <div class="stat-label">Highest CTC</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">6 months</div>
+                    <div class="stat-label">Avg Time to Job</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">5000+</div>
+                    <div class="stat-label">Hiring Companies</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- INTERVIEW REPOSITORY SECTION -->
+        <div id="interviews" class="section">
+            <div class="highlight">
+                🎤 <strong>Interview Insights:</strong> Access 50,000+ real interview questions and strategies from top companies. Master tech interviews, consulting case studies, and business acumen rounds.
+            </div>
+
+            <!-- Interview Selector -->
+            <div class="interview-sidebar">
+                <h3 style="font-size: 1.2rem; margin-bottom: 12px; color: #2a5298;">Select an Interview</h3>
+                <div class="interview-list" id="interview-list">
+                    <div class="interview-item active" onclick="selectInterview(0)">
+                        <div class="interview-item-title">Google SDE</div>
+                        <div class="interview-item-role">Software Engineer</div>
+                    </div>
+                    <div class="interview-item" onclick="selectInterview(1)">
+                        <div class="interview-item-title">McKinsey Case Study</div>
+                        <div class="interview-item-role">Business Analyst</div>
+                    </div>
+                    <div class="interview-item" onclick="selectInterview(2)">
+                        <div class="interview-item-title">Goldman Sachs Quant</div>
+                        <div class="interview-item-role">Quantitative Analyst</div>
+                    </div>
+                    <div class="interview-item" onclick="selectInterview(3)">
+                        <div class="interview-item-title">Amazon SDE</div>
+                        <div class="interview-item-role">Senior Engineer</div>
+                    </div>
+                    <div class="interview-item" onclick="selectInterview(4)">
+                        <div class="interview-item-title">Deloitte Consulting</div>
+                        <div class="interview-item-role">Business Analyst</div>
+                    </div>
+                    <div class="interview-item" onclick="selectInterview(5)">
+                        <div class="interview-item-title">Microsoft Cloud</div>
+                        <div class="interview-item-role">Cloud Architect</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Interview Details -->
+            <div id="interview-detail" class="interview-details"></div>
+
+            <!-- Interview Categories -->
+            <div class="section-title"><span class="section-icon">🎯</span> Interview Preparation Categories</div>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-header"><span class="card-icon">💻</span><span class="card-title">Coding Interviews</span></div>
+                    <div class="card-content">
+                        <div class="card-meta"><span class="meta-tag">500+ Questions</span><span class="meta-tag">All Levels</span></div>
+                        <div class="card-desc">Data structures, algorithms, problem-solving from real interviews.</div>
+                        <div class="card-info"><strong>Topics:</strong> Arrays, LinkedLists, Trees, Graphs, DP<br><strong>Time:</strong> 4-6 months</div>
+                        <div class="card-btns"><button class="btn btn-primary">Practice</button><button class="btn btn-secondary">Solutions</button></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><span class="card-icon">🏗️</span><span class="card-title">System Design</span></div>
+                    <div class="card-content">
+                        <div class="card-meta"><span class="meta-tag">200+ Questions</span><span class="meta-tag">Advanced</span></div>
+                        <div class="card-desc">Scalable systems, architectural patterns, real-world design.</div>
+                        <div class="card-info"><strong>Companies:</strong> Google, Amazon, Uber, Netflix<br><strong>Time:</strong> 3-4 months</div>
+                        <div class="card-btns"><button class="btn btn-primary">Learn</button><button class="btn btn-secondary">Cases</button></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><span class="card-icon">📊</span><span class="card-title">Case Studies</span></div>
+                    <div class="card-content">
+                        <div class="card-meta"><span class="meta-tag">150+ Cases</span><span class="meta-tag">Consulting</span></div>
+                        <div class="card-desc">Business case frameworks, analytical thinking, problem structuring.</div>
+                        <div class="card-info"><strong>Topics:</strong> Market Sizing, Profitability, Strategy<br><strong>Time:</strong> 2-3 months</div>
+                        <div class="card-btns"><button class="btn btn-primary">Practice</button><button class="btn btn-secondary">Framework</button></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><span class="card-icon">👔</span><span class="card-title">Behavioral Round</span></div>
+                    <div class="card-content">
+                        <div class="card-meta"><span class="meta-tag">200+ Q&A</span><span class="meta-tag">Essential</span></div>
+                        <div class="card-desc">Tell me about yourself, conflict resolution, culture fit questions.</div>
+                        <div class="card-info"><strong>Success Rate:</strong> 88% with prep<br><strong>Duration:</strong> 20-30 min</div>
+                        <div class="card-btns"><button class="btn btn-primary">Questions</button><button class="btn btn-secondary">Tips</button></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><span class="card-icon">🗄️</span><span class="card-title">Database & SQL</span></div>
+                    <div class="card-content">
+                        <div class="card-meta"><span class="meta-tag">400+ Questions</span><span class="meta-tag">All Levels</span></div>
+                        <div class="card-desc">SQL queries, joins, indexing, database design, optimization.</div>
+                        <div class="card-info"><strong>Databases:</strong> MySQL, PostgreSQL, MongoDB<br><strong>Time:</strong> 2-3 months</div>
+                        <div class="card-btns"><button class="btn btn-primary">Practice</button><button class="btn btn-secondary">Playground</button></div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><span class="card-icon">💰</span><span class="card-title">Finance Concepts</span></div>
+                    <div class="card-content">
+                        <div class="card-meta"><span class="meta-tag">250+ Topics</span><span class="meta-tag">Intermediate</span></div>
+                        <div class="card-desc">Options pricing, portfolio analysis, risk management, trading.</div>
+                        <div class="card-info"><strong>Companies:</strong> Goldman Sachs, Citadel, Jane Street<br><strong>Time:</strong> 3-4 months</div>
+                        <div class="card-btns"><button class="btn btn-primary">Learn</button><button class="btn btn-secondary">Problems</button></div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Success Stories -->
+            <div class="section-title"><span class="section-icon">⭐</span> Recent Success Stories (2024-2025)</div>
+            <div class="cards-grid">
+                <div class="card">
+                    <div class="card-header"><span class="card-icon">🎯</span><span class="card-title">Google SDE 2025</span></div>
+                    <div class="card-content">
+                        <div class="rating">⭐⭐⭐⭐⭐</div>
+                        <div class="card-desc"><strong>Rahul Kumar</strong> | Bangalore | 4 rounds</div>
+                        <div class="card-info">Online → 2 Coding → System Design → Behavioral. <strong>Selected!</strong> ₹50 LPA</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><span class="card-icon">📊</span><span class="card-title">McKinsey BA 2025</span></div>
+                    <div class="card-content">
+                        <div class="rating">⭐⭐⭐⭐⭐</div>
+                        <div class="card-desc"><strong>Priya Sharma</strong> | Hyderabad | 3 cases</div>
+                        <div class="card-info">3 Case Studies → Personal Fit → Background. <strong>Selected!</strong> ₹30 LPA</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><span class="card-icon">💰</span><span class="card-title">Goldman Quant 2025</span></div>
+                    <div class="card-content">
+                        <div class="rating">⭐⭐⭐⭐⭐</div>
+                        <div class="card-desc"><strong>Arjun Patel</strong> | Bangalore | 3 rounds</div>
+                        <div class="card-info">Assessment → Quant Interviews → Trading Simulation. <strong>Selected!</strong> ₹65 LPA</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><span class="card-icon">📦</span><span class="card-title">Amazon SDE 2025</span></div>
+                    <div class="card-content">
+                        <div class="rating">⭐⭐⭐⭐⭐</div>
+                        <div class="card-desc"><strong>Neha Singh</strong> | Hyderabad | 5 rounds</div>
+                        <div class="card-info">Online → 3 Coding → Design → Bar Raiser. <strong>Selected!</strong> ₹48 LPA</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><span class="card-icon">☁️</span><span class="card-title">Microsoft Cloud 2025</span></div>
+                    <div class="card-content">
+                        <div class="rating">⭐⭐⭐⭐</div>
+                        <div class="card-desc"><strong>Vikram Desai</strong> | Bangalore | 4 rounds</div>
+                        <div class="card-info">Azure Design → C# Coding → System Design. <strong>Selected!</strong> ₹42 LPA</div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header"><span class="card-icon">🏦</span><span class="card-title">ICICI Analyst 2025</span></div>
+                    <div class="card-content">
+                        <div class="rating">⭐⭐⭐⭐⭐</div>
+                        <div class="card-desc"><strong>Anjali Nair</strong> | Chennai | 3 rounds</div>
+                        <div class="card-info">Assessment → Finance Interview → HR Round. <strong>Selected!</strong> ₹16 LPA</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Footer Statistics -->
+            <div style="margin-top: 50px;">
+                <div class="section-title"><span class="section-icon">📊</span> Repository Statistics</div>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">6</div>
+                        <div class="stat-label">Companies Tracked</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">18</div>
+                        <div class="stat-label">Total Interview Rounds</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">2025</div>
+                        <div class="stat-label">Latest Data Year</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="footer">
+        <div class="footer-logo">🎓 ABiZ</div>
+        <p>Career Excellence Hub for Tech & Business Roles - South India</p>
+        <p style="margin-top: 10px; font-size: 0.85rem; color: #999;">
+            Data sourced from 2024-2025 trends. Success stories and salary ranges are synthetic examples for educational purposes.
+        </p>
+    </div>
+
+    <script>
+        const interviews = [{
+            company: "Google",
+            role: "Software Engineer",
+            year: 2025,
+            rounds: [{
+                type: "Round 1: Online Assessment",
+                duration: "120 mins",
+                topics: ["Array Problems", "String Algorithms", "Tree Traversal"],
+                passRate: 50
+            }, {
+                type: "Round 2-3: Coding Rounds",
+                duration: "45 mins each",
+                topics: ["Graph Problems", "Dynamic Programming", "Design Patterns"],
+                passRate: 45
+            }, {
+                type: "Round 4: System Design",
+                duration: "45 mins",
+                topics: ["Scalability", "Database Design", "Load Balancing"],
+                passRate: 40
+            }, {
+                type: "Round 5: Behavioral",
+                duration: "30 mins",
+                topics: ["Leadership", "Teamwork", "Problem-Solving"],
+                passRate: 70
+            }]
+        }, {
+            company: "McKinsey & Co",
+            role: "Business Analyst",
+            year: 2025,
+            rounds: [{
+                type: "Case Study 1",
+                duration: "30 mins",
+                topics: ["Market Sizing", "Profitability Analysis", "Strategic Options"],
+                passRate: 35
+            }, {
+                type: "Case Study 2",
+                duration: "30 mins",
+                topics: ["Operations Optimization", "Pricing Strategy", "Go-to-Market"],
+                passRate: 35
+            }, {
+                type: "Personal Fit",
+                duration: "30 mins",
+                topics: ["Motivation", "Skills", "Problem Approach"],
+                passRate: 60
+            }]
+        }, {
+            company: "Goldman Sachs",
+            role: "Quantitative Analyst",
+            year: 2025,
+            rounds: [{
+                type: "Online Assessment",
+                duration: "120 mins",
+                topics: ["Probability", "Statistics", "Coding Basics"],
+                passRate: 25
+            }, {
+                type: "Quant Interview",
+                duration: "60 mins",
+                topics: ["Option Pricing", "Risk Models", "Stochastic Processes"],
+                passRate: 20
+            }, {
+                type: "Trading Simulation",
+                duration: "45 mins",
+                topics: ["Market Analysis", "Strategy", "Decision Making"],
+                passRate: 35
+            }]
+        }, {
+            company: "Amazon",
+            role: "Senior Software Engineer",
+            year: 2025,
+            rounds: [{
+                type: "Online Test",
+                duration: "120 mins",
+                topics: ["Trees", "Graphs", "Two Pointers"],
+                passRate: 50
+            }, {
+                type: "Coding Round 1-3",
+                duration: "45 mins each",
+                topics: ["Medium-Hard Problems", "System Design Discussion"],
+                passRate: 40
+            }, {
+                type: "Bar Raiser",
+                duration: "45 mins",
+                topics: ["Leadership", "Innovation", "Ownership"],
+                passRate: 35
+            }]
+        }, {
+            company: "Deloitte",
+            role: "Business Analyst",
+            year: 2025,
+            rounds: [{
+                type: "Business Case",
+                duration: "30 mins",
+                topics: ["Valuation", "Growth Strategy", "Cost Analysis"],
+                passRate: 45
+            }, {
+                type: "Technical Assessment",
+                duration: "45 mins",
+                topics: ["Excel", "Analytics", "Data Interpretation"],
+                passRate: 50
+            }, {
+                type: "Behavioral",
+                duration: "30 mins",
+                topics: ["Teamwork", "Communication", "Adaptability"],
+                passRate: 65
+            }]
+        }, {
+            company: "Microsoft",
+            role: "Cloud Architect",
+            year: 2025,
+            rounds: [{
+                type: "Azure Design Challenge",
+                duration: "60 mins",
+                topics: ["Cloud Architecture", "Microservices", "Security"],
+                passRate: 40
+            }, {
+                type: "C# Coding",
+                duration: "45 mins",
+                topics: ["OOP", "Async Programming", "Design Patterns"],
+                passRate: 45
+            }, {
+                type: "System Design",
+                duration: "45 mins",
+                topics: ["Scalability", "Disaster Recovery", "Performance"],
+                passRate: 40
+            }]
+        }];
+
+        function switchSection(id) {
+            document.querySelectorAll('.section').forEach(el => el.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function selectInterview(idx) {
+            document.querySelectorAll('.interview-item').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.interview-item')[idx].classList.add('active');
+
+            const interview = interviews[idx];
+            let html = `
+                <div class="interview-header">
+                    <div class="interview-company">${interview.company}</div>
+                    <div>Role: <strong>${interview.role}</strong> (${interview.year})</div>
+                    <div class="interview-meta">
+                        <div class="meta-box"><div class="meta-box-value">${interview.rounds.length}</div><div class="meta-box-label">Rounds</div></div>
+                        <div class="meta-box"><div class="meta-box-value">~${interview.rounds.reduce((a, r) => a + parseInt(r.duration), 0)}</div><div class="meta-box-label">Total Time</div></div>
+                        <div class="meta-box"><div class="meta-box-value">High</div><div class="meta-box-label">Difficulty</div></div>
+                    </div>
+                </div>
+            `;
+
+            interview.rounds.forEach((round, i) => {
+                        const difficulty = round.passRate >= 60 ? 'easy' : round.passRate >= 40 ? 'medium' : 'hard';
+                        const difficultyText = difficulty === 'easy' ? 'Easy' : difficulty === 'medium' ? 'Medium-Hard' : 'Hard';
+                        html += `
+                    <div class="round-box">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                            <div class="round-type">📋 ${round.type}</div>
+                            <span class="difficulty-badge difficulty-${difficulty}">Difficulty: ${difficultyText}</span>
+                        </div>
+                        <div style="font-size: 0.9rem; color: #666; margin-bottom: 8px;">⏱ ${round.duration}</div>
+                        <div style="margin-bottom: 10px;">
+                            ${round.topics.map(t => `<span class="topic-tag">${t}</span>`).join('')}
+                        </div>
+                        <div class="success-bar">
+                            <span>Pass Rate:</span>
+                            <div class="bar"><div class="bar-fill" style="width: ${round.passRate}%"></div></div>
+                            <span><strong>${round.passRate}%</strong></span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += `
+                <div class="prep-guide">
+                    <h4>📚 Preparation Strategy</h4>
+                    <div class="prep-steps">
+                        <div class="prep-step"><span class="step-num">1</span> Study the technical topics thoroughly</div>
+                        <div class="prep-step"><span class="step-num">2</span> Practice similar problems and understand concepts</div>
+                        <div class="prep-step"><span class="step-num">3</span> Mock interview with experienced mentors</div>
+                        <div class="prep-step"><span class="step-num">4</span> Research company and prepare stories</div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById('interview-detail').innerHTML = html;
+        }
+
+        function filterDomain(domain) {
+            document.querySelectorAll('.filter-btn').forEach(el => el.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            document.querySelectorAll('.card[data-domain]').forEach(card => {
+                if (domain === 'all' || card.dataset.domain === domain) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        document.addEventListener('click', e => {
+            if (e.target.classList.contains('btn')) {
+                alert('✅ Feature coming soon! This will open comprehensive interview preparation materials, practice problems, or job listings.');
+            }
+        });
+
+        // Initialize
+        selectInterview(0);
+    </script>
+</body>
+
+</html>
