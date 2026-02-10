@@ -33,9 +33,9 @@ export default function Footer() {
         <div className="border-t border-border my-4"></div>
 
         {/* Bottom Row */}
-        <div className="flex flex-col md:flex-row items-center justify-between gap-2 text-xs text-muted">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-2 text-[11px] text-muted">
           <p>
-            © 2026 BizAI. Built with ❤️ by Naga Shiva D, Kaushal Reddy S, and Ranjith Raja B
+            © 2026 BizAI. Built with ❤️ by Naga Shiva D, Kaushal Reddy S, and Ranjith Raja B. A joint initiative by ASB and AI 
           </p>
           <p>
             Ethical news consumption • Transparent sources • Go Green
